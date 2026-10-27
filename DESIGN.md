@@ -91,7 +91,7 @@ Density is that of a terminal: tight rows, tabular numbers, square corners, no d
 - Pure black ground with DOS 16-colour roles, never gradients or glow.
 - Double-line panels (3px double cyan) with yellow titles sitting on the top rule.
 - A pixel-art night-sky masthead; Departure Mono for the board, Ubuntu for titles, JetBrains Mono for paragraphs.
-- Numbered messages (#0001…) and numbered bases (00–12) as the wayfinding system.
+- Numbered messages (#0001…) and numbered bases (00–13) as the wayfinding system.
 - One cyan status bar, sticky at the bottom, carrying hotkeys, language and the node clock.
 
 ## Colors

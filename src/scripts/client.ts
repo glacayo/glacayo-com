@@ -389,7 +389,7 @@ function isTyping(target: EventTarget | null): boolean {
 let baseDigits = '';
 let baseTimer = 0;
 
-/** Collects one or two digits so bases 00-12 are all reachable. */
+/** Collects one or two digits so every two-digit base number is reachable. */
 function pushBaseDigit(digit: string): void {
   window.clearTimeout(baseTimer);
   baseDigits += digit;

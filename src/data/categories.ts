@@ -13,6 +13,7 @@ export const categoryIds = [
   'libraries',
   'languages',
   'security',
+  'wordpress',
 ] as const;
 
 export type CategoryId = (typeof categoryIds)[number];
@@ -42,6 +43,7 @@ export const categories: Category[] = [
   { id: 'libraries', slugs: { es: 'librerias', en: 'libraries' }, number: '10', labels: { es: 'Librerías', en: 'Libraries' }, short: { es: 'Librerías', en: 'Libraries' }, icon: '\uEB9C' },
   { id: 'languages', slugs: { es: 'lenguajes', en: 'languages' }, number: '11', labels: { es: 'Lenguajes', en: 'Languages' }, short: { es: 'Lenguajes', en: 'Languages' }, icon: '\uEAE9' },
   { id: 'security', slugs: { es: 'seguridad', en: 'security' }, number: '12', labels: { es: 'Seguridad', en: 'Security' }, short: { es: 'Seguridad', en: 'Security' }, icon: '\uEB53' },
+  { id: 'wordpress', slugs: { es: 'wordpress', en: 'wordpress' }, number: '13', labels: { es: 'WordPress', en: 'WordPress' }, short: { es: 'WordPress', en: 'WordPress' }, icon: '\uF19A' },
 ];
 
 export const getCategory = (id: CategoryId): Category =>

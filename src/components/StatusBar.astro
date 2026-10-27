@@ -1,4 +1,5 @@
 ---
+import { categories } from '../data/categories';
 import { useTranslations, type Lang } from '../i18n/ui';
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 
 const { lang, alternateUrl, showMessageNav = false } = Astro.props;
 const t = useTranslations(lang);
+const lastBase = categories.at(-1)?.number ?? '00';
 ---
 
 <footer class="status-bar" role="contentinfo">
@@ -17,7 +19,7 @@ const t = useTranslations(lang);
       <li><kbd>/</kbd> {t('status.search')}</li>
       {showMessageNav && <li><kbd>N</kbd> {t('status.next')}</li>}
       {showMessageNav && <li><kbd>P</kbd> {t('status.prev')}</li>}
-      {!showMessageNav && <li><kbd>00-12</kbd> {t('status.bases')}</li>}
+      {!showMessageNav && <li><kbd>00-{lastBase}</kbd> {t('status.bases')}</li>}
     </ul>
     <a class="lang" href={alternateUrl} hreflang={lang === 'es' ? 'en' : 'es'} aria-label={t('status.langLabel')}>
       [{t('status.lang')}]
