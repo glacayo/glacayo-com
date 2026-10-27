@@ -3,8 +3,8 @@ import { render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import Icon from '../../../components/Icon.astro';
 import PostActions from '../../../components/PostActions.astro';
-import { getCategory } from '../../../data/categories';
-import { categoryUrl, formatDate, isoDate, otherLang, useTranslations } from '../../../i18n/ui';
+import { categoryUrl, getCategory } from '../../../data/categories';
+import { formatDate, isoDate, otherLang, useTranslations } from '../../../i18n/ui';
 import { findTranslation, getAllPosts, relatedPosts, type Post } from '../../../lib/posts';
 
 export async function getStaticPaths() {

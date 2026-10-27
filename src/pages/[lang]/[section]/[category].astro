@@ -2,18 +2,22 @@
 import Base from '../../../layouts/Base.astro';
 import Box from '../../../components/Box.astro';
 import MessageTable from '../../../components/MessageTable.astro';
-import { categories, type CategoryId } from '../../../data/categories';
-import { categorySegment, categoryUrl, langs, otherLang, type Lang } from '../../../i18n/ui';
+import { categories, categoryUrl } from '../../../data/categories';
+import { categorySegment, langs, otherLang, type Lang } from '../../../i18n/ui';
 import { getPostsByLang } from '../../../lib/posts';
 
 export function getStaticPaths() {
-  return langs.flatMap((lang) => categories.map((category) => ({ params: { lang, section: categorySegment[lang], category: category.id } })));
+  return langs.flatMap((lang) =>
+    categories.map((category) => ({
+      params: { lang, section: categorySegment[lang], category: category.slugs[lang] },
+      props: { category },
+    })),
+  );
 }
 
 const lang = Astro.params.lang as Lang;
-const categoryId = Astro.params.category as CategoryId;
-const category = categories.find((item) => item.id === categoryId)!;
-const posts = (await getPostsByLang(lang)).filter((post) => post.entry.data.category === categoryId);
+const { category } = Astro.props;
+const posts = (await getPostsByLang(lang)).filter((post) => post.entry.data.category === category.id);
 const label = category.labels[lang];
 ---
 
