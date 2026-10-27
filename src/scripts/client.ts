@@ -185,7 +185,8 @@ async function like(post: PostContext): Promise<void> {
       body: '{}',
     });
     if (!response.ok || !response.headers.get('content-type')?.includes('application/json')) {
-      if (response.status === 404 || response.status === 405) return;
+      // No API yet (local dev, or KV not bound): keep the local like silently.
+      if ([404, 405, 503].includes(response.status)) return;
       throw new Error(String(response.status));
     }
     const data = (await response.json()) as { count: number };

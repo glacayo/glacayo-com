@@ -15,9 +15,16 @@ interface KVNamespace {
 }
 
 interface Env {
-  LIKES: KVNamespace;
+  /** Absent until the KV namespace is bound in wrangler.toml. */
+  LIKES?: KVNamespace;
   LIKES_SALT?: string;
 }
+
+interface BoundEnv extends Env {
+  LIKES: KVNamespace;
+}
+
+const unavailable = (): Response => json({ error: 'likes_unavailable' }, 503);
 
 interface Context {
   request: Request;
@@ -51,28 +58,32 @@ function readSlug(params: Context['params']): string | null {
   return slug && slug.length <= 120 && SLUG_PATTERN.test(slug) ? slug : null;
 }
 
-async function voterKey(request: Request, env: Env, slug: string): Promise<string> {
+async function voterKey(request: Request, env: BoundEnv, slug: string): Promise<string> {
   const ip = request.headers.get('cf-connecting-ip') ?? 'unknown';
   const agent = request.headers.get('user-agent') ?? '';
   return `voter:${slug}:${await sha256(`${ip}|${agent}|${env.LIKES_SALT ?? 'glacayo'}`)}`;
 }
 
-async function readCount(env: Env, slug: string): Promise<number> {
+async function readCount(env: BoundEnv, slug: string): Promise<number> {
   const value = Number.parseInt((await env.LIKES.get(`count:${slug}`)) ?? '0', 10);
   return Number.isFinite(value) && value > 0 ? value : 0;
 }
 
 export async function onRequestGet({ request, env, params }: Context): Promise<Response> {
+  if (!env.LIKES) return unavailable();
+  const bound = env as BoundEnv;
   const slug = readSlug(params);
   if (!slug) return json({ error: 'invalid_slug' }, 400);
   const [count, voted] = await Promise.all([
-    readCount(env, slug),
-    env.LIKES.get(await voterKey(request, env, slug)),
+    readCount(bound, slug),
+    bound.LIKES.get(await voterKey(request, bound, slug)),
   ]);
   return json({ count, liked: voted !== null });
 }
 
-export async function onRequestPost({ request, env, params }: Context): Promise<Response> {
+export async function onRequestPost({ request, env: rawEnv, params }: Context): Promise<Response> {
+  if (!rawEnv.LIKES) return unavailable();
+  const env = rawEnv as BoundEnv;
   const slug = readSlug(params);
   if (!slug) return json({ error: 'invalid_slug' }, 400);
 
