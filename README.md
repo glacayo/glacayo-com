@@ -59,15 +59,9 @@ Post content in Markdown.
 
 ## Deploying to Cloudflare Pages
 
-1. Create the KV namespace for likes and put its id in `wrangler.toml`:
-   ```bash
-   npx wrangler kv namespace create LIKES
-   ```
-2. Set a salt used to hash reader identifiers:
-   ```bash
-   npx wrangler pages secret put LIKES_SALT
-   ```
-3. Connect the repository in Cloudflare Pages with build command `pnpm build` and output directory `dist`.
+The project is connected to Cloudflare Pages through Git: every push to `main` deploys to production and other branches get preview URLs. Build command `pnpm build`, output directory `dist`, Node.js version from `.node-version`.
+
+The like counter uses the Workers KV namespace bound as `LIKES` in `wrangler.toml` and a `LIKES_SALT` secret set in the Pages project settings (or with `npx wrangler pages secret put LIKES_SALT --project-name glacayo-com`).
 
 Local secrets belong in `.dev.vars`, which is git-ignored.
 

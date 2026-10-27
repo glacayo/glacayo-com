@@ -2,9 +2,8 @@ name = "glacayo-com"
 compatibility_date = "2026-10-01"
 pages_build_output_dir = "dist"
 
-# Like counter storage. Create the namespace with `npx wrangler kv namespace create LIKES`,
-# then uncomment this block and paste its id. Set a salt with
-# `npx wrangler pages secret put LIKES_SALT --project-name glacayo-com`.
-# [[kv_namespaces]]
-# binding = "LIKES"
-# id = "<kv-namespace-id>"
+# Like counter storage (namespace "glacayo-likes"). The LIKES_SALT secret is set in
+# the Cloudflare dashboard or with `npx wrangler pages secret put LIKES_SALT`.
+[[kv_namespaces]]
+binding = "LIKES"
+id = "2296bd90508b459bbce5c046585df1df"
