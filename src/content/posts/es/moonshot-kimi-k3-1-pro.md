@@ -10,7 +10,7 @@ Si sigues un poco el mundo de la IA, seguro viste el nombre **Kimi** por todos l
 
 Y por si fuera poco, la empresa arrastra una de las polémicas más jugosas del año.
 
-Así que prepárate un café, porque hoy repasamos todo: quiénes son, cuánto cuesta, cómo fueron evolucionando sus modelos, qué tan bueno es el nuevo y, claro, el chisme.
+Hoy repasamos todo: quiénes son, cuánto cuesta, cómo fueron evolucionando sus modelos, qué tan bueno es el nuevo y, claro, el chisme.
 
 ## ¿Quiénes son Moonshot AI?
 
@@ -51,7 +51,7 @@ Pero lo interesante de verdad viene ahora.
 
 ## ☕ El chisme: la polémica con Anthropic
 
-Agarra el café, que esto se pone bueno. Eso sí: todo lo que sigue son **acusaciones** de terceros, no hechos probados en ningún tribunal. Te cuento quién dijo qué, con fecha y fuente.
+Aquí es donde se pone bueno. Eso sí: todo lo que sigue son **acusaciones** de terceros, no hechos probados en ningún tribunal. Te cuento quién dijo qué, con fecha y fuente.
 
 **Febrero de 2026: la acusación de destilación.** [Anthropic](https://x.com/AnthropicAI), la empresa detrás de Claude, publicó que Moonshot había generado **más de 3,4 millones de intercambios** con Claude usando **cientos de cuentas fraudulentas**. Según Anthropic, el objetivo era copiar sus capacidades de razonamiento agéntico, programación, uso de computadora y visión. A esa práctica se le llama *destilación*: usar las respuestas de un modelo para entrenar otro.
 

@@ -10,7 +10,7 @@ If you follow AI even casually, you've probably seen **Kimi** pop up everywhere 
 
 And as if that weren't enough, the company is tangled up in one of the juiciest controversies of the year.
 
-So grab a coffee. Today we're covering all of it: who they are, what it costs, how their models have evolved, how good the new one really is, and, of course, the tea.
+Today we're covering all of it: who they are, what it costs, how their models have evolved, how good the new one really is, and, of course, the tea.
 
 ## Who is Moonshot AI?
 

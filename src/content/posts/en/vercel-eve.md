@@ -12,7 +12,7 @@ If you're anything like me, your brain jumps straight to Claude Code, Codex, Ope
 
 I had all of those questions, so I sat down with the docs, the official announcement, and a handful of tutorials to answer them one by one. Spoiler: eve is something different from what most of us picture when we read "agent," and once that clicks, a whole lot of ideas open up.
 
-Grab a coffee and let's take it piece by piece.
+Get comfy, because we're taking this one piece at a time.
 
 > **The short answer:** eve is an **open-source** framework from **Vercel** for building AI agents that live on a server and work for other people (your clients, your team, or an automated process). It's not a coding agent like Claude Code or Codex. It's the kit you use to build your own. An eve agent is **a folder** with a Markdown file of instructions, tools written in TypeScript, and "skills" written in Markdown. You can run it on your PC, on your own server, or on Vercel, and you can plug in pretty much any model.
 

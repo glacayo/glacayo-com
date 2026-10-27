@@ -12,7 +12,7 @@ Y si eres como yo, la cabeza se te va de inmediato a Claude Code, a Codex, a Ope
 
 Me hice todas esas preguntas, así que me senté a leer la documentación, el anuncio oficial y varios tutoriales para responderlas una por una. Spoiler: eve es algo distinto a lo que uno se imagina al leer "agente", y entender esa diferencia te abre un montón de ideas.
 
-Prepárate un café y vamos por partes.
+Ponte cómodo, que vamos por partes.
 
 > **La respuesta corta:** eve es un framework **open source** de **Vercel** para construir agentes de IA que viven en un servidor y trabajan para otros (tus clientes, tu equipo o un proceso automático). No es un agente de programación como Claude Code o Codex: es el kit para fabricar el tuyo. Un agente de eve es **una carpeta** con un archivo Markdown de instrucciones, herramientas en TypeScript y "habilidades" en Markdown. Lo puedes correr en tu PC, en tu propio servidor o en Vercel, y le conectas prácticamente cualquier modelo.
 
