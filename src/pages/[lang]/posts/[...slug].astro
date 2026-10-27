@@ -57,7 +57,7 @@ const fileName = `${post.slug}.md`;
     <header class="post-header">
       <p class="post-meta">
         <span class="msg num">MSG #{post.number}</span>
-        <a class="meta-link" href={`/${lang}/c/${category.id}/`}>{category.labels[lang]}</a>
+        <a class="meta-link" href={`/${lang}/category/${category.id}/`}>{category.labels[lang]}</a>
         <span><time datetime={isoDate(data.date)}>{formatDate(data.date, lang)}</time></span>
         <span>{post.readMinutes} {t('post.readTime')}</span>
         {data.sample && <span class="tag-sample">{t('sample')}</span>}

@@ -56,7 +56,7 @@ const countFor = (id: CategoryId) => posts.filter((post) => post.entry.data.cate
         categories.map((category, index) => (
           <li>
             <a
-              href={`/${lang}/c/${category.id}/`}
+              href={`/${lang}/category/${category.id}/`}
               aria-current={active === category.id ? 'page' : undefined}
               data-base-index={index + 1}
             >

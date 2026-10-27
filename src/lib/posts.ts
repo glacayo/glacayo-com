@@ -38,8 +38,8 @@ export async function getAllPosts(): Promise<Post[]> {
       lang,
       slug,
       number: '',
-      url: `/${lang}/p/${slug}/`,
-      mdUrl: `/${lang}/p/${slug}.md`,
+      url: `/${lang}/posts/${slug}/`,
+      mdUrl: `/${lang}/posts/${slug}.md`,
       readMinutes: Math.max(1, Math.round(words / WORDS_PER_MINUTE)),
     } satisfies Post;
   });

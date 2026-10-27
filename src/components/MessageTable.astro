@@ -43,7 +43,7 @@ const t = useTranslations(lang);
                 {!compact && <p class="desc">{post.entry.data.description}</p>}
               </td>
               <td class="c-base">
-                <a class="tag" href={`/${lang}/c/${category.id}/`}>
+                <a class="tag" href={`/${lang}/category/${category.id}/`}>
                   <Icon glyph={category.icon} /> <span class="base-code" title={category.labels[lang]}>{category.short[lang].toUpperCase()}</span>
                 </a>
               </td>

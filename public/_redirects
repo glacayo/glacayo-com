@@ -1,0 +1,3 @@
+# Old short URLs (before 2026-10-26) to the readable ones.
+/:lang/p/*  /:lang/posts/:splat  301
+/:lang/c/*  /:lang/category/:splat  301
