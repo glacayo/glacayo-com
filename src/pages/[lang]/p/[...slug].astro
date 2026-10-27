@@ -1,0 +1,411 @@
+---
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Icon from '../../../components/Icon.astro';
+import PostActions from '../../../components/PostActions.astro';
+import { getCategory } from '../../../data/categories';
+import { formatDate, isoDate, otherLang, useTranslations } from '../../../i18n/ui';
+import { findTranslation, getAllPosts, relatedPosts, type Post } from '../../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+  return posts.map((post) => ({ params: { lang: post.lang, slug: post.slug }, props: { post } }));
+}
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { lang } = post;
+const { data } = post.entry;
+const t = useTranslations(lang);
+const category = getCategory(data.category);
+const { Content, headings } = await render(post.entry);
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+
+const all = await getAllPosts();
+const sameLang = all.filter((other) => other.lang === lang);
+const index = sameLang.findIndex((other) => other.slug === post.slug);
+// sameLang is newest first: "next" is the newer message, "prev" the older one.
+const newer = index > 0 ? sameLang[index - 1] : undefined;
+const older = index < sameLang.length - 1 ? sameLang[index + 1] : undefined;
+const related = relatedPosts(post, all);
+const translation = await findTranslation(post);
+const alternateUrl = translation ? translation.url : `/${otherLang(lang)}/`;
+const fileName = `${post.slug}.md`;
+---
+
+<Base
+  lang={lang}
+  title={data.title}
+  description={data.description}
+  alternateUrl={alternateUrl}
+  hasTranslation={Boolean(translation)}
+  active={data.category}
+  showMessageNav
+  contentFirst
+  ogType="article"
+>
+  <article
+    class="post"
+    data-post-slug={post.slug}
+    data-post-lang={lang}
+    data-post-title={data.title}
+    data-post-date={formatDate(data.date, lang)}
+  >
+    <header class="post-header">
+      <p class="post-meta">
+        <span class="msg num">MSG #{post.number}</span>
+        <a class="meta-link" href={`/${lang}/c/${category.id}/`}>{category.labels[lang]}</a>
+        <span><time datetime={isoDate(data.date)}>{formatDate(data.date, lang)}</time></span>
+        <span>{post.readMinutes} {t('post.readTime')}</span>
+        {data.sample && <span class="tag-sample">{t('sample')}</span>}
+      </p>
+      <h1 class="post-title">{data.title}</h1>
+      <p class="post-lede">{data.description}</p>
+      {
+        data.updated && (
+          <p class="post-update">
+            <Icon name="history" /> {t('post.updated').toLowerCase()}{' '}
+            <time datetime={isoDate(data.updated)}>{formatDate(data.updated, lang)}</time>
+            {data.updateNote && <> — {data.updateNote}</>}
+          </p>
+        )
+      }
+    </header>
+
+    <div class="resume" data-resume hidden>
+      <Icon name="eye" />
+      <button type="button" class="link-button" data-resume-go>
+        {t('post.resume')} (<span data-resume-percent></span>)
+      </button>
+      <button type="button" class="link-button dismiss" data-resume-dismiss aria-label={t('post.dismiss')}>
+        <Icon name="close" />
+      </button>
+    </div>
+
+    <PostActions lang={lang} mdUrl={post.mdUrl} fileName={fileName} position="top" />
+
+    <div class="post-layout">
+    <div class="post-main">
+    <div class="prose" data-pagefind-body>
+      <Content />
+    </div>
+
+    <nav class="msg-nav" aria-label={`${t('post.prev')} / ${t('post.next')}`}>
+      {
+        older ? (
+          <a href={older.url} data-nav="prev" rel="prev" aria-label={`${t('post.prev')}: ${older.entry.data.title}`}>
+            <span class="dir" aria-hidden="true">‹ P</span>
+            <span class="title">{older.entry.data.title}</span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        newer && (
+          <a href={newer.url} data-nav="next" rel="next" class="next" aria-label={`${t('post.next')}: ${newer.entry.data.title}`}>
+            <span class="title">{newer.entry.data.title}</span>
+            <span class="dir" aria-hidden="true">N ›</span>
+          </a>
+        )
+      }
+    </nav>
+
+  {
+    related.length > 0 && (
+      <section class="related" aria-labelledby="related-title">
+        <h2 id="related-title" class="related-title">{t('messages.related')}</h2>
+        <ol class="related-list">
+          {related.map((item) => (
+            <li>
+              <span class="r-num num">{item.number}</span>
+              <a class="r-title" href={item.url}>{item.entry.data.title}</a>
+              <span class="r-base">{getCategory(item.entry.data.category).short[lang].toUpperCase()}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )
+  }
+    </div>
+
+  {
+    toc.length > 0 && (
+      <nav class="toc" aria-labelledby="toc-title" data-toc>
+        <h2 id="toc-title" class="toc-title">{t('post.contents')}</h2>
+        <ol class="toc-list">
+          {toc.map((heading) => (
+            <li class:list={[`depth-${heading.depth}`]}>
+              <a href={`#${heading.slug}`} data-toc-link={heading.slug}>{heading.text}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )
+  }
+    </div>
+  </article>
+</Base>
+
+<style>
+  /* Text column on the left two thirds, contents index on the right third. */
+  .post-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: var(--gutter);
+    align-items: start;
+  }
+  .post-main {
+    min-width: 0;
+  }
+  .toc {
+    position: sticky;
+    top: 24px;
+    margin-top: 36px;
+    max-height: calc(100vh - 90px);
+    overflow-y: auto;
+    padding: 2px 0 2px 16px;
+    border-left: 5px solid var(--rule);
+    color: var(--grey);
+  }
+  .toc-title {
+    margin: 0 0 10px;
+    color: var(--grey);
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 24px;
+  }
+  .toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .toc-list li + li {
+    margin-top: 6px;
+  }
+  .toc-list .depth-3 {
+    padding-left: 2ch;
+  }
+  .toc-list a {
+    display: block;
+    color: var(--grey);
+    text-decoration: none;
+    line-height: 1.35;
+  }
+  .toc-list a::before {
+    content: '· ';
+  }
+  .toc-list a:hover {
+    color: var(--text);
+    text-decoration: underline;
+  }
+  .toc-list a[aria-current='true'] {
+    color: var(--cyan-hi);
+  }
+  .toc-list a[aria-current='true']::before {
+    content: '> ';
+  }
+  @media (max-width: 991px) {
+    .post-layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .toc {
+      display: none;
+    }
+  }
+  .post-header {
+    padding-bottom: 0;
+  }
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 0;
+    margin: 0;
+    font-size: var(--chrome-size);
+    color: var(--dim);
+  }
+  /* One tone: only the message number keeps its colour; items are dot-separated. */
+  .post-meta > :not(.tag-sample) + :not(.tag-sample)::before {
+    content: '·';
+    margin: 0 12px;
+    color: var(--rule);
+  }
+  .post-meta .tag-sample {
+    margin-left: 14px;
+  }
+  @media (max-width: 600px) {
+    .post-meta {
+      gap: 4px 16px;
+    }
+    .post-meta > :not(.tag-sample) + :not(.tag-sample)::before {
+      content: none;
+    }
+    .post-meta .tag-sample {
+      margin-left: 0;
+    }
+  }
+  .msg {
+    color: var(--cyan-hi);
+  }
+  .meta-link {
+    color: var(--grey);
+    text-decoration: none;
+  }
+  .meta-link:hover {
+    color: var(--cyan-hi);
+    text-decoration: underline;
+  }
+  .post-title {
+    margin: 12px 0 0;
+    max-width: 32ch;
+    font-family: var(--font-read);
+    font-size: clamp(30px, 4.2vw, 44px);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    color: var(--title);
+    text-wrap: balance;
+  }
+  /* The title and lede form one block; context starts after a wider gap. */
+  .post-lede {
+    margin: 14px 0 18px;
+    max-width: 64ch;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+  .post-update {
+    margin: 0;
+    padding-top: 14px;
+    max-width: 90ch;
+    color: var(--dim);
+    font-size: var(--chrome-size);
+  }
+  .resume {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0 26px;
+    padding: 6px 10px;
+    border: 1px solid var(--yellow);
+    color: var(--yellow);
+    width: fit-content;
+    max-width: 100%;
+  }
+  .resume[hidden] {
+    display: none;
+  }
+  .link-button {
+    background: none;
+    border: 0;
+    padding: 2px 0;
+    color: inherit;
+    font: inherit;
+    font-size: var(--chrome-size);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .link-button.dismiss {
+    text-decoration: none;
+    color: var(--grey);
+  }
+  /* Post ending: quiet, unboxed, one line per item. */
+  .msg-nav {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--gutter);
+    margin-top: 48px;
+    padding-top: 14px;
+    border-top: 1px dotted var(--rule);
+  }
+  .msg-nav a {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    min-width: 0;
+    padding: 4px 0;
+    color: var(--grey);
+    text-decoration: none;
+  }
+  .msg-nav .next {
+    grid-column: 2;
+    justify-content: flex-end;
+    text-align: right;
+  }
+  .msg-nav .dir {
+    flex: none;
+    color: var(--dim);
+  }
+  .msg-nav .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .msg-nav a:hover .title {
+    color: var(--cyan-hi);
+    text-decoration: underline;
+  }
+  .msg-nav a:hover .dir {
+    color: var(--yellow);
+  }
+  .related {
+    margin-top: 40px;
+  }
+  .related-title {
+    margin: 0 0 10px;
+    color: var(--grey);
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 24px;
+  }
+  .related-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .related-list li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: baseline;
+    padding: 6px 0;
+  }
+  .r-num {
+    color: var(--cyan);
+  }
+  .r-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .r-title:hover {
+    color: var(--cyan-hi);
+    text-decoration: underline;
+  }
+  .r-base {
+    color: var(--dim);
+    white-space: nowrap;
+  }
+  @media (max-width: 600px) {
+    .msg-nav {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 4px;
+    }
+    .msg-nav .next {
+      grid-column: 1;
+    }
+    .r-base {
+      display: none;
+    }
+  }
+</style>

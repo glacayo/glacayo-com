@@ -1,0 +1,34 @@
+# Local AI agent skills and tooling (project-local, not versioned)
+.agents/
+.claude/
+.impeccable/
+.atl/
+skills-lock.json
+
+# Dependencies and build output
+node_modules/
+dist/
+.astro/
+.wrangler/
+
+# Secrets and local environment (never commit)
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+*.pem
+*.key
+
+# Backups, logs and OS clutter
+*.bak
+*.orig
+*.old
+*.tmp
+*.swp
+*~
+*.log
+npm-debug.log*
+pnpm-debug.log*
+.DS_Store
+Thumbs.db

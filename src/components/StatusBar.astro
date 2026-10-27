@@ -1,0 +1,86 @@
+---
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  alternateUrl: string;
+  showMessageNav?: boolean;
+}
+
+const { lang, alternateUrl, showMessageNav = false } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<footer class="status-bar" role="contentinfo">
+  <div class="container status-inner">
+    <ul class="hotkeys" aria-label="Keyboard shortcuts">
+      <li><kbd>/</kbd> {t('status.search')}</li>
+      {showMessageNav && <li><kbd>N</kbd> {t('status.next')}</li>}
+      {showMessageNav && <li><kbd>P</kbd> {t('status.prev')}</li>}
+      {!showMessageNav && <li><kbd>00-12</kbd> {t('status.bases')}</li>}
+    </ul>
+    <a class="lang" href={alternateUrl} hreflang={lang === 'es' ? 'en' : 'es'} aria-label={t('status.langLabel')}>
+      [{t('status.lang')}]
+    </a>
+    <p class="node">Node 1 · <time id="clock" class="num">--:--:--</time></p>
+  </div>
+</footer>
+
+<style>
+  .status-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    margin-top: 48px;
+    background: var(--cyan);
+    color: #000;
+    font-family: var(--font-term);
+    font-size: var(--chrome-size);
+  }
+  .status-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 28px;
+    min-height: 34px;
+    padding-block: 4px;
+  }
+  .hotkeys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  kbd {
+    font: inherit;
+    color: #000;
+    background: var(--yellow);
+    padding: 0 5px;
+  }
+  .lang {
+    color: #000;
+    font-weight: 400;
+  }
+  .lang:hover {
+    color: #000;
+    background: var(--yellow);
+  }
+  .node {
+    margin: 0 0 0 auto;
+  }
+  @media (max-width: 600px) {
+    .hotkeys {
+      display: none;
+    }
+    .node {
+      margin-left: auto;
+    }
+  }
+  @media (pointer: coarse) {
+    .hotkeys {
+      display: none;
+    }
+  }
+</style>

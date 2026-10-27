@@ -1,0 +1,47 @@
+---
+interface Props {
+  title?: string;
+  as?: 'section' | 'div' | 'nav' | 'aside';
+  label?: string;
+  class?: string;
+  id?: string;
+}
+
+const { title, as: Tag = 'section', label, class: className, id } = Astro.props;
+---
+
+<Tag class:list={['box', className]} aria-label={label ?? title} id={id}>
+  {title && <h2 class="box-title">{title}</h2>}
+  <slot />
+</Tag>
+
+<style>
+  .box {
+    position: relative;
+    border: var(--line);
+    padding: 22px 18px 16px;
+    margin-top: 14px;
+  }
+  .box-title {
+    position: absolute;
+    top: -14px;
+    left: 14px;
+    margin: 0;
+    padding: 0 8px;
+    background: var(--ground);
+    color: var(--yellow);
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 24px;
+    white-space: nowrap;
+    max-width: calc(100% - 28px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  @media (max-width: 600px) {
+    .box {
+      padding: 20px 12px 12px;
+    }
+  }
+</style>

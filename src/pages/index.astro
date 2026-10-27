@@ -1,0 +1,19 @@
+---
+// The site lives under /es/ and /en/; the root sends visitors to the default language.
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>glacayo.com</title>
+    <meta http-equiv="refresh" content="0; url=/es/" />
+    <link rel="canonical" href="https://glacayo.com/es/" />
+    <script is:inline>
+      location.replace(navigator.language && navigator.language.toLowerCase().startsWith('en') ? '/en/' : '/es/');
+    </script>
+  </head>
+  <body style="background:#000;color:#aaa">
+    <a href="/es/" style="color:#55ffff">glacayo.com/es</a> · <a href="/en/" style="color:#55ffff">glacayo.com/en</a>
+  </body>
+</html>

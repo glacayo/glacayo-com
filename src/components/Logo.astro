@@ -1,0 +1,193 @@
+---
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/ui';
+import banner from '../data/banner.json';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// The masthead is pixel art: the sky and clouds ship as one 320x40 PNG (one image
+// pixel per art pixel) and only the stars are SVG, so they can twinkle.
+// Regenerate both with `node scripts/banner.mjs`.
+// Twinkling stars get one of five rhythm groups so they never blink in unison.
+const stars = banner.stars.map((star, index) => ({ ...star, fill: banner.palette[star.tone], group: index % 5 }));
+const sparkles = banner.sparkles.map((sparkle, index) => ({
+  ...sparkle,
+  core: banner.palette[sparkle.core],
+  arms: banner.palette[sparkle.arms],
+  group: index % 3,
+}));
+---
+
+<header class="masthead" role="banner">
+  <a class="logo-link" href={`/${lang}/`} aria-label={`GLACAYO BBS · ${t('site.title')}`}>
+    <svg
+      class="logo"
+      viewBox={`0 0 ${banner.width} ${banner.height}`}
+      preserveAspectRatio="xMidYMid slice"
+      shape-rendering="crispEdges"
+      role="img"
+      aria-hidden="true"
+      focusable="false"
+      data-logo
+    >
+      <image href="/banner.png" x="0" y="0" width={banner.width} height={banner.height} class="layer" />
+      <g class="stars">
+        {
+          stars.map((star) => (
+            <rect
+              x={star.x}
+              y={star.y}
+              width="1"
+              height="1"
+              fill={star.fill}
+              class:list={[{ twinkle: star.twinkle }, star.twinkle && `g${star.group}`]}
+            />
+          ))
+        }
+      </g>
+      <g class="sparkles">
+        {
+          sparkles.map((sparkle) => (
+            <g class={`sparkle s${sparkle.group}`}>
+              <rect x={sparkle.x - 1} y={sparkle.y} width="3" height="1" fill={sparkle.arms} />
+              <rect x={sparkle.x} y={sparkle.y - 1} width="1" height="3" fill={sparkle.arms} />
+              <rect x={sparkle.x} y={sparkle.y} width="1" height="1" fill={sparkle.core} />
+            </g>
+          ))
+        }
+      </g>
+    </svg>
+  </a>
+  <div class="tagline">
+    <p class="site-title">{t('site.title')}</p>
+    <p class="site-description">{t('site.description')}</p>
+  </div>
+</header>
+
+<style>
+  .masthead {
+    padding-top: 28px;
+  }
+  .logo-link {
+    display: block;
+    text-decoration: none;
+  }
+  .logo {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 320 / 40;
+    background: var(--ground);
+  }
+  .layer {
+    image-rendering: pixelated;
+  }
+  /* On narrow screens keep a usable height and crop the sides instead. */
+  @media (max-width: 767px) {
+    .logo {
+      aspect-ratio: auto;
+      height: 76px;
+    }
+  }
+  .tagline {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: var(--line);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 8px var(--gutter);
+    align-items: baseline;
+  }
+  .site-title {
+    grid-column: 1 / span 3;
+    margin: 0;
+    color: var(--yellow);
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .site-description {
+    grid-column: 4 / span 9;
+    margin: 0;
+    max-width: 72ch;
+    color: #cfd8da;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  @media (max-width: 991px) {
+    .site-title,
+    .site-description {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* Stars: a slow, partial dim (never off), each group on its own rhythm. */
+  @media (prefers-reduced-motion: no-preference) {
+    .twinkle {
+      animation: twinkle 4s ease-in-out infinite;
+    }
+    .g1 {
+      animation-duration: 5.2s;
+      animation-delay: -1.3s;
+    }
+    .g2 {
+      animation-duration: 3.4s;
+      animation-delay: -2.1s;
+    }
+    .g3 {
+      animation-duration: 6.1s;
+      animation-delay: -0.7s;
+    }
+    .g4 {
+      animation-duration: 4.7s;
+      animation-delay: -3.2s;
+    }
+    .sparkle {
+      animation: glint 6.5s ease-in-out infinite;
+    }
+    .s1 {
+      animation-duration: 7.4s;
+      animation-delay: -2.6s;
+    }
+    .s2 {
+      animation-duration: 5.8s;
+      animation-delay: -4.1s;
+    }
+
+    /* The art draws in top to bottom like a slow modem, once per session. */
+    :global(html.logo-dialing) .logo {
+      clip-path: inset(0 0 100% 0);
+      animation: dial 1400ms steps(25, end) forwards;
+    }
+  }
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+  @keyframes glint {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    45%,
+    55% {
+      opacity: 0.45;
+    }
+  }
+  @keyframes dial {
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+</style>

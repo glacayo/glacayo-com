@@ -1,0 +1,50 @@
+---
+export const icons = {
+  github: '\uEA84',
+  heart: '\uEB05',
+  share: '\uEC25',
+  bookmark: '\uEAA5',
+  download: '\uEC74',
+  search: '\uEA6D',
+  terminal: '\uEA85',
+  tag: '\uEA66',
+  calendar: '\uEAB0',
+  history: '\uEA82',
+  markdown: '\uEB1D',
+  copy: '\uEBCC',
+  check: '\uEAB2',
+  close: '\uEA76',
+  arrowLeft: '\uEA9B',
+  arrowRight: '\uEA9C',
+  chevronRight: '\uEAB6',
+  link: '\uEB15',
+  home: '\uEB06',
+  globe: '\uEB01',
+  eye: '\uEA70',
+} as const;
+
+export type IconName = keyof typeof icons;
+
+interface Props {
+  name?: IconName;
+  glyph?: string;
+  class?: string;
+}
+
+const { name, glyph, class: className } = Astro.props;
+const char = glyph ?? (name ? icons[name] : '');
+---
+
+<span class:list={['icon', className]} aria-hidden="true">{char}</span>
+
+<style>
+  .icon {
+    display: inline-block;
+    width: 1.1em;
+    font-family: 'Departure Mono', monospace;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    text-align: center;
+  }
+</style>

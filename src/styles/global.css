@@ -1,0 +1,465 @@
+@font-face {
+  font-family: 'Departure Mono';
+  src: url('/fonts/departure-mono-nf.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ubuntu NF';
+  src: url('/fonts/ubuntu-nf-propo-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ubuntu NF';
+  src: url('/fonts/ubuntu-nf-propo-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ubuntu NF';
+  src: url('/fonts/ubuntu-nf-propo-medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ubuntu NF';
+  src: url('/fonts/ubuntu-nf-propo-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ubuntu Mono NF';
+  src: url('/fonts/ubuntu-mono-nf-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Ubuntu Mono NF';
+  src: url('/fonts/ubuntu-mono-nf-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --ground: #000;
+  --cyan: #00aaaa;
+  --cyan-hi: #55ffff;
+  --yellow: #ffff55;
+  --magenta: #ff55ff;
+  --green: #55ff55;
+  --grey: #aaaaaa;
+  --dim: #8a8a8a;
+  --rule: #555;
+  --text: #e8eef0;
+  --title: #f0f4f5;
+  --muted: #a4b0b3;
+  --code-ground: #061414;
+
+  /* Pixel face drawn on an 11px grid: 16.5px (1.5x) for chrome, 22px (2x) for titles. */
+  --font-term: 'Departure Mono', 'Ubuntu Mono NF', monospace;
+  --font-head: var(--font-term);
+  --chrome-size: 16.5px;
+  /* Titles and subjects. */
+  --font-read: 'Ubuntu NF', 'Ubuntu', system-ui, sans-serif;
+  /* Paragraph text. */
+  --font-body: 'JetBrains Mono Variable', monospace;
+  --font-code: 'Ubuntu Mono NF', 'Departure Mono', monospace;
+
+  --gutter: 24px;
+  --line: 3px double var(--cyan);
+  color-scheme: dark;
+  scrollbar-color: var(--cyan) var(--ground);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--ground);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--ground);
+  color: var(--grey);
+  font-family: var(--font-term);
+  font-size: var(--chrome-size);
+  line-height: 1.45;
+  caret-color: var(--cyan-hi);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--cyan);
+  color: #000;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cyan-hi);
+  outline-offset: 2px;
+}
+
+a {
+  color: var(--cyan-hi);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+a:hover {
+  color: var(--yellow);
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ground);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cyan);
+  border: 3px solid var(--ground);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -60px;
+  z-index: 10;
+  background: var(--cyan);
+  color: #000;
+  padding: 6px 12px;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 12px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--gutter);
+}
+
+.col-sidebar {
+  grid-column: 1 / span 3;
+}
+.col-main {
+  grid-column: 4 / span 9;
+  min-width: 0;
+}
+
+@media (max-width: 991px) {
+  .col-sidebar,
+  .col-main {
+    grid-column: 1 / -1;
+  }
+}
+
+.tag {
+  color: var(--yellow);
+  font-family: var(--font-term);
+  white-space: nowrap;
+}
+.tag-sample {
+  color: var(--magenta);
+  border: 1px solid var(--magenta);
+  padding: 0 5px;
+  font-family: var(--font-term);
+  font-size: var(--chrome-size);
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.term-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 4px 12px;
+  border: 1px solid var(--cyan);
+  background: var(--ground);
+  color: var(--text);
+  font: inherit;
+  font-family: var(--font-term);
+  font-size: var(--chrome-size);
+  cursor: pointer;
+  text-decoration: none;
+}
+.term-button:hover {
+  background: var(--cyan);
+  color: #000;
+}
+.term-button[aria-pressed='true'] {
+  background: var(--cyan);
+  color: #000;
+}
+.term-button .hotkey {
+  color: var(--yellow);
+}
+.term-button:hover .hotkey,
+.term-button[aria-pressed='true'] .hotkey {
+  color: #000;
+}
+
+/* ---------- Reading column ---------- */
+
+.prose {
+  margin-top: 36px;
+  max-width: 72ch;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text);
+  overflow-wrap: break-word;
+}
+.prose > :first-child {
+  margin-top: 0;
+}
+.prose p,
+.prose ul,
+.prose ol,
+.prose blockquote,
+.prose table,
+.prose figure {
+  margin: 0 0 1.25em;
+}
+.prose h2,
+.prose h3,
+.prose h4 {
+  scroll-margin-top: 24px;
+  font-family: var(--font-read);
+  color: var(--title);
+  line-height: 1.25;
+  text-wrap: balance;
+}
+.prose h2 {
+  margin: 2.2em 0 0.6em;
+  font-size: 28px;
+  font-weight: 700;
+}
+.prose h2::before {
+  content: '## ';
+  color: var(--cyan);
+  font-family: var(--font-term);
+  font-weight: 400;
+}
+.prose h3 {
+  margin: 1.9em 0 0.5em;
+  font-size: 22px;
+  font-weight: 500;
+}
+.prose h3::before {
+  content: '### ';
+  color: var(--cyan);
+  font-family: var(--font-term);
+  font-weight: 400;
+}
+.prose a {
+  color: var(--cyan-hi);
+}
+.prose strong {
+  color: #fff;
+  font-weight: 700;
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+.prose li + li {
+  margin-top: 0.35em;
+}
+.prose ul > li::marker {
+  content: '■  ';
+  color: var(--cyan);
+  font-size: 0.7em;
+}
+.prose ol > li::marker {
+  color: var(--cyan-hi);
+  font-family: var(--font-term);
+}
+.prose blockquote {
+  margin-left: 0;
+  padding: 2px 0 2px 1.2em;
+  border-left: 1px solid var(--rule);
+  color: var(--grey);
+  font-style: italic;
+}
+.prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+.prose hr {
+  border: 0;
+  border-top: var(--line);
+  margin: 2.5em 0;
+}
+.prose :not(pre) > code {
+  padding: 1px 5px;
+  background: var(--code-ground);
+  color: var(--cyan-hi);
+  font-family: var(--font-body);
+  font-size: 0.95em;
+}
+
+.prose table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 16px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+.prose th {
+  text-align: left;
+  font-family: var(--font-term);
+  font-size: var(--chrome-size);
+  font-weight: 400;
+  color: var(--magenta);
+  border-bottom: 1px solid var(--cyan);
+  padding: 6px 14px 6px 0;
+}
+.prose td {
+  padding: 8px 14px 8px 0;
+  border-bottom: 1px dotted var(--rule);
+  vertical-align: top;
+}
+
+/* Code blocks: a double-line box with the language cut into the top rule. */
+.code-box {
+  position: relative;
+  margin: 1.8em 0;
+  border: var(--line);
+  max-width: 100%;
+}
+.code-box figcaption {
+  position: absolute;
+  top: -14px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.code-lang,
+.code-copy {
+  padding: 0 8px;
+  background: var(--ground);
+  font-family: var(--font-term);
+  font-size: var(--chrome-size);
+  line-height: 24px;
+}
+.code-lang {
+  color: var(--yellow);
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.code-copy {
+  border: 0;
+  color: var(--cyan-hi);
+  cursor: pointer;
+  pointer-events: auto;
+}
+.code-copy:hover {
+  color: var(--yellow);
+}
+.code-box pre {
+  margin: 0;
+  padding: 22px 18px 16px;
+  overflow-x: auto;
+  background: var(--ground) !important;
+  font-family: var(--font-code);
+  font-size: 16px;
+  line-height: 1.55;
+  tab-size: 2;
+}
+.code-box pre code {
+  font-family: inherit;
+}
+
+/* ---------- Search results (rendered client-side) ---------- */
+
+.search-note {
+  margin: 0 0 8px;
+  color: var(--dim);
+  font-size: var(--chrome-size);
+}
+.search-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.search-list li + li {
+  margin-top: 10px;
+}
+.search-list a {
+  font-family: var(--font-read);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--title);
+}
+.search-list p {
+  margin: 2px 0 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.search-list mark {
+  background: var(--cyan);
+  color: #000;
+}
+
+@media (max-width: 600px) {
+  .prose {
+    font-size: 15px;
+  }
+  .prose h2 {
+    font-size: 24px;
+  }
+  .code-box pre {
+    font-size: 15px;
+    padding-inline: 12px;
+  }
+}

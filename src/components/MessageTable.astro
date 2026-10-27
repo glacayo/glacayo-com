@@ -1,0 +1,206 @@
+---
+import Icon from './Icon.astro';
+import { getCategory } from '../data/categories';
+import { formatDate, isoDate, useTranslations, type Lang } from '../i18n/ui';
+import type { Post } from '../lib/posts';
+
+interface Props {
+  lang: Lang;
+  posts: Post[];
+  compact?: boolean;
+  caption?: string;
+}
+
+const { lang, posts, compact = false, caption } = Astro.props;
+const t = useTranslations(lang);
+---
+
+{
+  posts.length === 0 ? (
+    <p class="empty">{t('messages.empty')}</p>
+  ) : (
+    <table class:list={['messages', { compact }]}>
+      {caption && <caption class="visually-hidden">{caption}</caption>}
+      <thead>
+        <tr>
+          <th scope="col" class="c-num">{t('col.number')}</th>
+          <th scope="col">{t('col.subject')}</th>
+          <th scope="col" class="c-base">{t('col.base')}</th>
+          <th scope="col" class="c-date">{t('col.date')}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {posts.map((post) => {
+          const category = getCategory(post.entry.data.category);
+          return (
+            <tr>
+              <td class="c-num num"><span class="read-mark" data-read-key={`${post.lang}/${post.slug}`} aria-hidden="true"></span>{post.number}</td>
+              <td class="c-subj">
+                <a class="subj" href={post.url}>
+                  {post.entry.data.title}
+                </a>
+                {post.entry.data.sample && <span class="tag-sample">{t('sample')}</span>}
+                {!compact && <p class="desc">{post.entry.data.description}</p>}
+              </td>
+              <td class="c-base">
+                <a class="tag" href={`/${lang}/c/${category.id}/`}>
+                  <Icon glyph={category.icon} /> <span class="base-code" title={category.labels[lang]}>{category.short[lang].toUpperCase()}</span>
+                </a>
+              </td>
+              <td class="c-date num">
+                <time datetime={isoDate(post.entry.data.date)}>{formatDate(post.entry.data.date, lang)}</time>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  )
+}
+
+<style>
+  .messages {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--chrome-size);
+  }
+  th {
+    text-align: left;
+    font-weight: 400;
+    color: var(--magenta);
+    border-bottom: 1px solid var(--cyan);
+    padding: 4px 10px 6px;
+  }
+  td {
+    vertical-align: top;
+    padding: 14px 10px;
+    border-bottom: 1px dotted var(--rule);
+  }
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  .c-num {
+    width: 6ch;
+  }
+  td.c-num {
+    color: var(--cyan-hi);
+    white-space: nowrap;
+  }
+  .read-mark {
+    display: inline-block;
+    width: 1.1ch;
+    color: var(--yellow);
+  }
+  :global(.is-read) .read-mark,
+  .read-mark:global(.is-read) {
+    color: var(--dim);
+  }
+  .subj {
+    font-family: var(--font-read);
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--title);
+    text-decoration: none;
+    text-wrap: balance;
+  }
+  .subj:hover {
+    color: var(--cyan-hi);
+    text-decoration: underline;
+  }
+  .tag-sample {
+    margin-left: 10px;
+  }
+  .desc {
+    margin: 6px 0 0;
+    max-width: 72ch;
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .c-base {
+    width: 13ch;
+  }
+  .c-base .tag {
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .c-base .tag:hover {
+    text-decoration: underline;
+  }
+  .c-date {
+    width: 11ch;
+    white-space: nowrap;
+  }
+  td.c-date {
+    color: var(--grey);
+  }
+  .compact td {
+    padding-block: 10px;
+  }
+  .compact .subj {
+    font-size: 18px;
+  }
+  .empty {
+    margin: 4px 0;
+    font-family: var(--font-body);
+    color: var(--muted);
+  }
+  tbody tr:hover .c-num {
+    color: var(--yellow);
+  }
+
+  @media (max-width: 767px) {
+    .messages,
+    .messages tbody,
+    .messages tr,
+    .messages td {
+      display: block;
+    }
+    .messages thead {
+      position: absolute;
+      left: 0;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+    .messages tr {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 4px 12px;
+      padding: 14px 0;
+      border-bottom: 1px dotted var(--rule);
+    }
+    .messages tbody tr:last-child {
+      border-bottom: 0;
+    }
+    .messages td {
+      padding: 0;
+      border: 0;
+      width: auto;
+    }
+    .c-num {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .c-date {
+      grid-column: 2;
+      grid-row: 1;
+      justify-self: end;
+    }
+    .c-subj {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      margin-top: 4px;
+    }
+    .c-base {
+      grid-column: 1 / -1;
+      grid-row: 3;
+    }
+    .subj {
+      font-size: 19px;
+    }
+  }
+</style>

@@ -1,0 +1,68 @@
+---
+import Base from '../../layouts/Base.astro';
+import Box from '../../components/Box.astro';
+import { langs, otherLang, useTranslations, type Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return langs.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+---
+
+<Base lang={lang} title={t('bases.saved')} alternateUrl={`/${otherLang(lang)}/saved/`} active="saved">
+  <Box title={t('messages.saved')}>
+    <p class="saved-empty" data-saved-empty>{t('saved.empty')}</p>
+    <ol id="saved-list" class="saved-list" data-remove-label={t('saved.remove')}></ol>
+  </Box>
+</Base>
+
+<style>
+  .saved-empty {
+    margin: 4px 0;
+    font-family: var(--font-body);
+    color: var(--muted);
+  }
+  .saved-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .saved-list:empty {
+    display: none;
+  }
+  .saved-list :global(li) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 6px 18px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dotted var(--rule);
+  }
+  .saved-list :global(li:last-child) {
+    border-bottom: 0;
+  }
+  .saved-list :global(.subj) {
+    font-family: var(--font-read);
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--title);
+    text-decoration: none;
+  }
+  .saved-list :global(.subj:hover) {
+    color: var(--cyan-hi);
+    text-decoration: underline;
+  }
+  .saved-list :global(time) {
+    color: var(--grey);
+  }
+  @media (max-width: 600px) {
+    .saved-list :global(li) {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .saved-list :global(.subj) {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

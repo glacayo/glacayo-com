@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Box from '../components/Box.astro';
+import { useTranslations } from '../i18n/ui';
+
+const es = useTranslations('es');
+const en = useTranslations('en');
+---
+
+<Base lang="es" title="404" alternateUrl="/en/" hasTranslation={false}>
+  <Box title={es('404.title')}>
+    <div class="not-found">
+      <p>{es('404.text')} <a href="/es/">{es('404.back')}</a></p>
+      <p lang="en">{en('404.text')} <a href="/en/">{en('404.back')}</a></p>
+    </div>
+  </Box>
+</Base>
+
+<style>
+  .not-found {
+    font-family: var(--font-body);
+    color: var(--text);
+    font-size: 18px;
+    line-height: 1.6;
+  }
+  .not-found p {
+    margin: 4px 0 12px;
+  }
+</style>

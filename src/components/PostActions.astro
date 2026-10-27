@@ -1,0 +1,116 @@
+---
+import Icon from './Icon.astro';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  mdUrl: string;
+  fileName: string;
+  position: 'top' | 'bottom';
+}
+
+const { lang, mdUrl, fileName, position } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="actions-bar" role="group" aria-label={t('post.actions')}>
+  <div class="actions" data-post-actions={position}>
+    <button
+      type="button"
+      class="term-button"
+      data-action="like"
+      aria-pressed="false"
+      data-label-off={t('post.like')}
+      data-label-on={t('post.liked')}
+      data-error={t('post.likeError')}
+    >
+      <Icon name="heart" />
+      <span data-label>{t('post.like')}</span>
+      <span class="count num" data-like-count>—</span>
+      {position === 'top' && <span class="hotkey" aria-hidden="true">[L]</span>}
+    </button>
+    <button type="button" class="term-button" data-action="share" data-copied={t('post.copied')}>
+      <Icon name="share" />
+      <span>{t('post.share')}</span>
+      {position === 'top' && <span class="hotkey" aria-hidden="true">[H]</span>}
+    </button>
+    <button
+      type="button"
+      class="term-button"
+      data-action="bookmark"
+      aria-pressed="false"
+      data-label-off={t('post.save')}
+      data-label-on={t('post.saved')}
+      data-saved={t('post.savedMsg')}
+      data-unsaved={t('post.unsavedMsg')}
+    >
+      <Icon name="bookmark" />
+      <span data-label>{t('post.save')}</span>
+      {position === 'top' && <span class="hotkey" aria-hidden="true">[B]</span>}
+    </button>
+    <a class="term-button" data-action="download" href={mdUrl} download={fileName}>
+      <Icon name="markdown" />
+      <span>{t('post.download')}</span>
+      {position === 'top' && <span class="hotkey" aria-hidden="true">[D]</span>}
+    </a>
+  </div>
+  <p class="action-status" role="status" aria-live="polite" data-action-status></p>
+</div>
+
+<style>
+  .actions-bar {
+    margin-top: 14px;
+    padding: 12px 0;
+    border-top: 1px dotted var(--rule);
+    border-bottom: 1px dotted var(--rule);
+  }
+  .actions :global(.term-button) {
+    border-color: var(--rule);
+    color: var(--grey);
+  }
+  .actions :global(.term-button .hotkey) {
+    color: var(--dim);
+  }
+  @media (pointer: coarse) {
+    .actions :global(.term-button .hotkey) {
+      display: none;
+    }
+  }
+  .actions :global(.term-button:hover),
+  .actions :global(.term-button[aria-pressed='true']) {
+    border-color: var(--cyan);
+    color: #000;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .count {
+    color: var(--cyan-hi);
+    min-width: 2ch;
+  }
+  :global(.term-button:hover) .count,
+  :global(.term-button[aria-pressed='true']) .count {
+    color: #000;
+  }
+  [data-action='like'][aria-pressed='true'] :global(.icon) {
+    color: #000;
+  }
+  [data-action='like'] :global(.icon) {
+    color: var(--magenta);
+  }
+  [data-action='like']:hover :global(.icon) {
+    color: #000;
+  }
+  .action-status {
+    margin: 10px 0 0;
+    min-height: 1.35em;
+    color: var(--green);
+    font-size: var(--chrome-size);
+  }
+  .action-status:empty {
+    margin: 0;
+    min-height: 0;
+  }
+</style>

@@ -1,0 +1,113 @@
+---
+import '@fontsource-variable/jetbrains-mono/wght.css';
+import '@fontsource-variable/jetbrains-mono/wght-italic.css';
+import '../styles/global.css';
+import Logo from '../components/Logo.astro';
+import Sidebar from '../components/Sidebar.astro';
+import StatusBar from '../components/StatusBar.astro';
+import type { CategoryId } from '../data/categories';
+import { otherLang, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  title?: string;
+  description?: string;
+  /** URL of this page in the other language (or its index when untranslated). */
+  alternateUrl: string;
+  /** True when alternateUrl is a real translation of this page. */
+  hasTranslation?: boolean;
+  active?: CategoryId | 'all' | 'saved';
+  showMessageNav?: boolean;
+  /** Below 992px, render the main column before the sidebar. */
+  contentFirst?: boolean;
+  ogType?: 'website' | 'article';
+}
+
+const {
+  lang,
+  title,
+  description,
+  alternateUrl,
+  hasTranslation = true,
+  active,
+  showMessageNav = false,
+  contentFirst = false,
+  ogType = 'website',
+} = Astro.props;
+const t = useTranslations(lang);
+const siteName = 'glacayo.com';
+const fullTitle = title ? `${title} · ${siteName}` : `${t('site.title')} · ${siteName}`;
+const metaDescription = description ?? t('site.description');
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const alternate = new URL(alternateUrl, Astro.site);
+const other = otherLang(lang);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={metaDescription} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={lang} href={canonical} />
+    {hasTranslation && <link rel="alternate" hreflang={other} href={alternate} />}
+    <link rel="alternate" hreflang="x-default" href={new URL(lang === 'es' ? canonical : alternate)} />
+    <meta name="theme-color" content="#000000" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title ?? t('site.title')} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === 'es' ? 'es_NI' : 'en_US'} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@GeovannyLacayo" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preload" href="/fonts/ubuntu-nf-propo-regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/departure-mono-nf.woff2" as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      try {
+        if (!sessionStorage.getItem('bbs:dialed') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.classList.add('logo-dialing');
+          sessionStorage.setItem('bbs:dialed', '1');
+        }
+      } catch (_) {}
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">{t('skip')}</a>
+    <div class="container">
+      <Logo lang={lang} />
+      <div class:list={['grid layout', { 'content-first': contentFirst }]}>
+        <Sidebar lang={lang} active={active} />
+        <main id="content" class="col-main" tabindex="-1">
+          <slot />
+        </main>
+      </div>
+    </div>
+    <StatusBar lang={lang} alternateUrl={alternateUrl} showMessageNav={showMessageNav} />
+    <script>
+      import '../scripts/client';
+    </script>
+  </body>
+</html>
+
+<style>
+  .layout {
+    margin-top: 34px;
+    align-items: start;
+  }
+  main:focus {
+    outline: none;
+  }
+  @media (max-width: 991px) {
+    .layout > :global(main) {
+      order: 1;
+    }
+    .content-first > :global(main) {
+      order: -1;
+    }
+  }
+</style>
