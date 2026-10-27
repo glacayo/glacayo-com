@@ -33,6 +33,7 @@ translationKey: shared-key
 - Spanish: neutral Latin American Spanish, addressing the reader as "tú". Friendly and conversational.
 - English: native North American English. Adapt idioms and phrasing; never translate literally. Use the real English UI names (for example WordPress menus).
 - Open with a hook that connects with the reader's problem or curiosity before going technical.
+- Don't reuse stock lines across posts (for example "grab a coffee"). Keep transitions short and vary them from post to post without getting flowery.
 - Controversies go in their own playful section titled `☕ El chisme: …` (es) / `☕ The Tea: …` (en). Keep it factual: say who alleges what, with dates and sources, and make clear that allegations are not proven facts.
 - Never tell the reader what research could not find ("I couldn't find…"). If information is missing or unnecessary, leave it out.
 - When mentioning notable people or companies, link their verified X account.
