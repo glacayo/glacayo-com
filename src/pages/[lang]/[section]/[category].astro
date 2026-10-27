@@ -3,11 +3,11 @@ import Base from '../../../layouts/Base.astro';
 import Box from '../../../components/Box.astro';
 import MessageTable from '../../../components/MessageTable.astro';
 import { categories, type CategoryId } from '../../../data/categories';
-import { langs, otherLang, type Lang } from '../../../i18n/ui';
+import { categorySegment, categoryUrl, langs, otherLang, type Lang } from '../../../i18n/ui';
 import { getPostsByLang } from '../../../lib/posts';
 
 export function getStaticPaths() {
-  return langs.flatMap((lang) => categories.map((category) => ({ params: { lang, category: category.id } })));
+  return langs.flatMap((lang) => categories.map((category) => ({ params: { lang, section: categorySegment[lang], category: category.id } })));
 }
 
 const lang = Astro.params.lang as Lang;
@@ -20,7 +20,7 @@ const label = category.labels[lang];
 <Base
   lang={lang}
   title={label}
-  alternateUrl={`/${otherLang(lang)}/category/${category.id}/`}
+  alternateUrl={categoryUrl(otherLang(lang), category.id)}
   active={category.id}
 >
   <Box title={`${category.number} · ${label.toUpperCase()}`} class="messages-box">

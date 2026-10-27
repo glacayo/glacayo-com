@@ -1,3 +1,5 @@
-# Old short URLs (before 2026-10-26) to the readable ones.
-/:lang/p/*  /:lang/posts/:splat  301
-/:lang/c/*  /:lang/category/:splat  301
+# Old category and post paths (before 2026-10-26) to the current ones.
+/es/c/*         /es/categoria/:splat  301
+/es/category/*  /es/categoria/:splat  301
+/en/c/*         /en/category/:splat   301
+/:lang/p/*      /:lang/posts/:splat   301

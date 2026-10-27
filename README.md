@@ -74,7 +74,7 @@ src/
   data/           categories and the generated masthead star layer
   i18n/           UI strings (es, en)
   layouts/        page shell
-  pages/          routes: /<lang>/posts/<slug>/, /<lang>/category/<id>/, the raw .md endpoint
+  pages/          routes: /<lang>/posts/<slug>/, /es/categoria/<id>/ or /en/category/<id>/, the raw .md endpoint
   scripts/        client-side enhancements
   styles/         global styles and fonts
 functions/api/    Cloudflare Pages Function for the like counter

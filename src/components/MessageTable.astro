@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import { getCategory } from '../data/categories';
-import { formatDate, isoDate, useTranslations, type Lang } from '../i18n/ui';
+import { categoryUrl, formatDate, isoDate, useTranslations, type Lang } from '../i18n/ui';
 import type { Post } from '../lib/posts';
 
 interface Props {
@@ -43,7 +43,7 @@ const t = useTranslations(lang);
                 {!compact && <p class="desc">{post.entry.data.description}</p>}
               </td>
               <td class="c-base">
-                <a class="tag" href={`/${lang}/category/${category.id}/`}>
+                <a class="tag" href={categoryUrl(lang, category.id)}>
                   <Icon glyph={category.icon} /> <span class="base-code" title={category.labels[lang]}>{category.short[lang].toUpperCase()}</span>
                 </a>
               </td>

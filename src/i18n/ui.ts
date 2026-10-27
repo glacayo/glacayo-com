@@ -132,6 +132,11 @@ export function useTranslations(lang: Lang) {
 
 export const otherLang = (lang: Lang): Lang => (lang === 'es' ? 'en' : 'es');
 
+// Category index path segment, localized per language.
+export const categorySegment: Record<Lang, string> = { es: 'categoria', en: 'category' };
+
+export const categoryUrl = (lang: Lang, id: string): string => `/${lang}/${categorySegment[lang]}/${id}/`;
+
 export function formatDate(date: Date, lang: Lang): string {
   return new Intl.DateTimeFormat(lang === 'es' ? 'es-NI' : 'en-US', {
     year: 'numeric',
