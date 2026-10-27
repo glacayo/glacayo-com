@@ -53,7 +53,11 @@ export async function getAllPosts(): Promise<Post[]> {
       });
   }
 
-  cache = posts.sort((a, b) => b.entry.data.date.valueOf() - a.entry.data.date.valueOf());
+  // Same-day posts fall back to their message number, so the list order always matches #NNNN.
+  cache = posts.sort(
+    (a, b) =>
+      b.entry.data.date.valueOf() - a.entry.data.date.valueOf() || b.number.localeCompare(a.number),
+  );
   return cache;
 }
 
