@@ -316,6 +316,22 @@ svg {
   color: var(--cyan-hi);
   font-family: var(--font-term);
 }
+.prose figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+}
+.prose figure figcaption {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.prose figure figcaption a {
+  color: var(--cyan);
+}
+
 .prose blockquote {
   margin-left: 0;
   padding: 2px 0 2px 1.2em;
