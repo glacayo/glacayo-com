@@ -3,6 +3,7 @@ import Box from './Box.astro';
 import Icon from './Icon.astro';
 import XLogo from './XLogo.astro';
 import { categories, categoryUrl, type CategoryId } from '../data/categories';
+import { kimiReferralUrl } from '../data/referrals';
 import { useTranslations, type Lang } from '../i18n/ui';
 import { getPostsByLang } from '../lib/posts';
 
@@ -76,6 +77,13 @@ const countFor = (id: CategoryId) => posts.filter((post) => post.entry.data.cate
     </ul>
   </Box>
 
+  <Box title={t('referral.title')} as="div" class="referral-box">
+    <p class="referral-text">{t('referral.text')}</p>
+    <a class="referral-cta" href={kimiReferralUrl} rel="sponsored noopener" target="_blank">
+      <Icon name="arrowRight" /> {t('referral.cta')}
+    </a>
+    <p class="referral-note">{t('referral.note')}</p>
+  </Box>
 </aside>
 
 <style>
@@ -194,6 +202,22 @@ const countFor = (id: CategoryId) => posts.filter((post) => post.entry.data.cate
   .sysop a:hover {
     color: var(--cyan-hi);
   }
+  .referral-text {
+    margin: 0 0 8px;
+    color: var(--grey);
+    line-height: 1.4;
+  }
+  .referral-cta {
+    color: var(--cyan-hi);
+    text-decoration: none;
+  }
+  .referral-cta:hover {
+    text-decoration: underline;
+  }
+  .referral-note {
+    margin: 8px 0 0;
+    color: var(--dim);
+  }
 
   @media (max-width: 991px) {
     /* Below the grid breakpoint the boxes join the layout grid so the
@@ -213,6 +237,9 @@ const countFor = (id: CategoryId) => posts.filter((post) => post.entry.data.cate
     }
     .sidebar > :global(.sysop-box) {
       order: 3;
+    }
+    .sidebar > :global(.referral-box) {
+      order: 4;
     }
     .bases {
       display: flex;
