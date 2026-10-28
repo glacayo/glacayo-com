@@ -80,7 +80,7 @@ Si leíste el post de eve, la pregunta es obligatoria. Los dos hablan de agentes
 - Con **eve**, el agente **es** el producto. Es una carpeta con instrucciones y herramientas que vive en un servidor y atiende por Slack, WhatsApp o una API. Es como contratar a un empleado digital.
 - Con **Genkit**, la IA vive **dentro de tu app**. Es una librería que importas en tu código para que tu web, tu backend o tu app móvil hagan cosas inteligentes, con la interfaz que tú diseñes. Es como darle superpoderes a tu app.
 
-Una no reemplaza a la otra. Y si te preguntas cómo se compara Genkit con el **ADK**, el otro framework de agentes de Google, eso merece su propio post, y sale mañana.
+Una no reemplaza a la otra. Y si te preguntas cómo se compara Genkit con el **ADK**, el otro framework de agentes de Google, eso merece [su propio post](/es/posts/genkit-vs-adk/).
 
 ## Las piezas de Genkit
 
@@ -392,7 +392,7 @@ Cuando lees "apps agénticas que hacen más que chatear", es fácil imaginar otr
 
 eve te ayuda a construir un empleado digital. Genkit te ayuda a que tu app misma se vuelva más inteligente.
 
-¿Y tú, qué parte de tu sitio o de tu app dejarías de resolver con un chat? Y mañana no te pierdas el siguiente: **Genkit contra el ADK de Google**, cara a cara.
+¿Y tú, qué parte de tu sitio o de tu app dejarías de resolver con un chat? Y si te quedó la duda de cuándo usar Genkit y cuándo el ADK, aquí los pongo [cara a cara](/es/posts/genkit-vs-adk/).
 
 ## Fuentes
 
