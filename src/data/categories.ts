@@ -45,7 +45,7 @@ export const categories: Category[] = [
   { id: 'languages', slugs: { es: 'lenguajes', en: 'languages' }, number: '11', labels: { es: 'Lenguajes', en: 'Languages' }, short: { es: 'Lenguajes', en: 'Languages' }, icon: '\uEAE9' },
   { id: 'security', slugs: { es: 'seguridad', en: 'security' }, number: '12', labels: { es: 'Seguridad', en: 'Security' }, short: { es: 'Seguridad', en: 'Security' }, icon: '\uEB53' },
   { id: 'wordpress', slugs: { es: 'wordpress', en: 'wordpress' }, number: '13', labels: { es: 'WordPress', en: 'WordPress' }, short: { es: 'WordPress', en: 'WordPress' }, icon: '\uF19A' },
-  { id: 'os', slugs: { es: 'sistemas-operativos', en: 'operating-systems' }, number: '14', labels: { es: 'Sistemas operativos', en: 'Operating systems' }, short: { es: 'SO', en: 'OS' }, icon: '\uEA7A' },
+  { id: 'os', slugs: { es: 'sistemas-operativos', en: 'operating-systems' }, number: '14', labels: { es: 'SO', en: 'OS' }, short: { es: 'SO', en: 'OS' }, icon: '\uEA7A' },
 ];
 
 export const getCategory = (id: CategoryId): Category =>
