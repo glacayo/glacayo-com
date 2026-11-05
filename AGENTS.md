@@ -24,7 +24,7 @@ translationKey: shared-key
 ```
 
 - `translationKey` must be identical in both languages. It links the [ES]/[EN] switch and `hreflang`.
-- `category` uses the internal English id from `src/data/categories.ts`: `programming`, `web`, `ai`, `agents`, `bots`, `homelab`, `hardware`, `skills`, `frameworks`, `libraries`, `languages`, `security`, `wordpress`.
+- `category` uses the internal English id from `src/data/categories.ts`: `programming`, `web`, `ai`, `agents`, `bots`, `homelab`, `hardware`, `skills`, `frameworks`, `libraries`, `languages`, `security`, `wordpress`, `os`.
 - A new category needs an entry in `src/data/categories.ts` (id, localized slugs, number, labels, short labels, Nerd Font icon). If the icon is not in `public/fonts/departure-mono-nf.woff2`, re-subset the font from the original Departure Mono Nerd Font and bump the `?v=N` query in both `src/styles/global.css` and the preload in `src/layouts/Base.astro`.
 - Optional: `updated` and `updateNote` for revisions; `draft: true` keeps a post out of the site.
 
