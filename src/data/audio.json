@@ -1,1 +1,128 @@
-{}
+{
+  "en/binance-hack": {
+    "src": "https://audio.glacayo.com/posts/en/binance-hack-01ba1c0d.mp3",
+    "duration": 905.4,
+    "bytes": 7243621,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "01ba1c0d9d04",
+    "generatedAt": "2026-11-05T16:55:10.557Z"
+  },
+  "en/genkit-vs-adk": {
+    "src": "https://audio.glacayo.com/posts/en/genkit-vs-adk-bcaf86f7.mp3",
+    "duration": 730.4,
+    "bytes": 5843742,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "bcaf86f72e69",
+    "generatedAt": "2026-11-05T16:56:47.415Z"
+  },
+  "en/google-genkit": {
+    "src": "https://audio.glacayo.com/posts/en/google-genkit-56b638ca.mp3",
+    "duration": 1014.9,
+    "bytes": 8120111,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "56b638cabaeb",
+    "generatedAt": "2026-11-05T16:59:00.262Z"
+  },
+  "en/mailbridge-smtp": {
+    "src": "https://audio.glacayo.com/posts/en/mailbridge-smtp-48d39112.mp3",
+    "duration": 522.4,
+    "bytes": 4180056,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "48d39112ba5a",
+    "generatedAt": "2026-11-05T17:00:08.357Z"
+  },
+  "en/moonshot-kimi-k3-1-pro": {
+    "src": "https://audio.glacayo.com/posts/en/moonshot-kimi-k3-1-pro-043083b2.mp3",
+    "duration": 794.6,
+    "bytes": 6357751,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "043083b248d0",
+    "generatedAt": "2026-11-05T17:01:56.422Z"
+  },
+  "en/omarchy": {
+    "src": "https://audio.glacayo.com/posts/en/omarchy-309cdd75.mp3",
+    "duration": 913.1,
+    "bytes": 7305282,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "309cdd75af15",
+    "generatedAt": "2026-11-05T17:03:58.140Z"
+  },
+  "en/vercel-eve": {
+    "src": "https://audio.glacayo.com/posts/en/vercel-eve-0fbf1d58.mp3",
+    "duration": 1058.1,
+    "bytes": 8465329,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "0fbf1d586389",
+    "generatedAt": "2026-11-05T17:06:15.905Z"
+  },
+  "es/binance-hack": {
+    "src": "https://audio.glacayo.com/posts/es/binance-hack-488bd3f2.mp3",
+    "duration": 992.2,
+    "bytes": 7938500,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "488bd3f25de9",
+    "generatedAt": "2026-11-05T16:40:57.798Z"
+  },
+  "es/genkit-vs-adk": {
+    "src": "https://audio.glacayo.com/posts/es/genkit-vs-adk-5b7d5057.mp3",
+    "duration": 741.9,
+    "bytes": 5936103,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "5b7d5057e13c",
+    "generatedAt": "2026-11-05T16:42:40.075Z"
+  },
+  "es/google-genkit": {
+    "src": "https://audio.glacayo.com/posts/es/google-genkit-79039bc2.mp3",
+    "duration": 1076.6,
+    "bytes": 8613750,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "79039bc214d0",
+    "generatedAt": "2026-11-05T16:45:08.243Z"
+  },
+  "es/mailbridge-smtp": {
+    "src": "https://audio.glacayo.com/posts/es/mailbridge-smtp-bf3d23a4.mp3",
+    "duration": 539.4,
+    "bytes": 4315616,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "bf3d23a45815",
+    "generatedAt": "2026-11-05T16:46:19.541Z"
+  },
+  "es/moonshot-kimi-k3-1-pro": {
+    "src": "https://audio.glacayo.com/posts/es/moonshot-kimi-k3-1-pro-30f1d3b2.mp3",
+    "duration": 843.6,
+    "bytes": 6749624,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "30f1d3b2cda3",
+    "generatedAt": "2026-11-05T16:48:27.009Z"
+  },
+  "es/omarchy": {
+    "src": "https://audio.glacayo.com/posts/es/omarchy-119e6f63.mp3",
+    "duration": 953.8,
+    "bytes": 7631300,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "119e6f636dad",
+    "generatedAt": "2026-11-05T16:50:37.671Z"
+  },
+  "es/vercel-eve": {
+    "src": "https://audio.glacayo.com/posts/es/vercel-eve-c4a12308.mp3",
+    "duration": 1107.1,
+    "bytes": 8857399,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "c4a12308ebd3",
+    "generatedAt": "2026-11-05T16:53:00.474Z"
+  }
+}
