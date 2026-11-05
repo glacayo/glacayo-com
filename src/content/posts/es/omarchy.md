@@ -2,7 +2,7 @@
 title: "Omarchy: el Linux de DHH que conquista a los developers (y qué tan duro es llegar desde Windows)"
 description: Qué es Omarchy, por qué tanta gente que programa se está cambiando, cómo es la curva de aprendizaje si vienes de Windows, cómo te puede ayudar un agente de IA en la transición y en qué gana o pierde frente a Ubuntu Desktop.
 date: 2026-11-05
-category: programming
+category: os
 translationKey: omarchy
 ---
 

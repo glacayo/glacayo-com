@@ -2,7 +2,7 @@
 title: "Omarchy: DHH's Linux Distro Is Winning Over Developers (and How Hard It Is Coming From Windows)"
 description: What Omarchy is, why so many developers are switching, what the learning curve looks like if you're coming from Windows, how an AI agent can smooth the move, and where it wins or loses against Ubuntu Desktop.
 date: 2026-11-05
-category: programming
+category: os
 translationKey: omarchy
 ---
 
