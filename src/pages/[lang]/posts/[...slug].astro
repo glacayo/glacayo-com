@@ -3,6 +3,7 @@ import { render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import Icon from '../../../components/Icon.astro';
 import PostActions from '../../../components/PostActions.astro';
+import PostAudio from '../../../components/PostAudio.astro';
 import { categoryUrl, getCategory } from '../../../data/categories';
 import { formatDate, isoDate, otherLang, useTranslations } from '../../../i18n/ui';
 import { findTranslation, getAllPosts, relatedPosts, type Post } from '../../../lib/posts';
@@ -86,6 +87,8 @@ const fileName = `${post.slug}.md`;
     </div>
 
     <PostActions lang={lang} mdUrl={post.mdUrl} fileName={fileName} position="top" />
+
+    <PostAudio lang={lang} slug={post.slug} title={data.title} />
 
     <div class="post-layout">
     <div class="post-main">

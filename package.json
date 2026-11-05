@@ -9,7 +9,8 @@
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "check": "astro check",
-    "astro": "astro"
+    "astro": "astro",
+    "audio": "node --env-file-if-exists=.env scripts/audio/generate.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.4",
@@ -19,7 +20,9 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
+    "@aws-sdk/client-s3": "^3.1161.0",
     "pagefind": "^1.5.2",
-    "typescript": "^5.9.0"
+    "typescript": "^5.9.0",
+    "ws": "^8.22.1"
   }
 }

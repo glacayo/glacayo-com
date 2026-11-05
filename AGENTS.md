@@ -64,6 +64,14 @@ translationKey: shared-key
 - Use a raw `<a href="…" rel="sponsored noopener" target="_blank">` tag; Markdown links get no `rel`.
 - The sidebar Kimi referral URL lives in `src/data/referrals.ts`.
 
+### Audio narration
+
+- Don't generate audio by hand. After a post reaches `main`, the `Post audio` GitHub Action narrates it once (OpenAI Realtime, voice Ash), uploads the MP3 to R2 and commits `src/data/audio.json`.
+- Never edit `src/data/audio.json` manually or commit test entries to it.
+- The narration reads headings, paragraphs and lists. Code blocks and tables become a short "see the article" line, and figures and the `## Fuentes` / `## Sources` section are skipped. Write so the prose still makes sense when heard.
+- The player always discloses that the voice is AI-generated. Keep that note.
+- If a published post changes substantially, ask the user before regenerating its audio (it costs API credits): run the workflow manually with `posts` set to `es/<slug>,en/<slug>`. Use `pnpm audio --dry-run --only es/<slug>` to preview the narration text.
+
 ## Workflow
 
 1. Draft both versions.

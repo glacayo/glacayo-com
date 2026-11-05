@@ -202,6 +202,12 @@ Square everything (0px radius). Borders are the shape language: 3px double cyan 
 - **Actions bar:** unboxed row between two 1px dotted Rule Grey lines; buttons use Rule Grey borders and Chrome Grey labels with Dim Grey hotkey hints (hidden on touch), inverting to cyan on hover or when pressed.
 - **Language switch:** lives only in the status bar; the header carries no translation link.
 
+### Audio player
+- **Placement:** right under the actions bar, only on posts with a narration; closed by a 1px dotted Rule Grey line.
+- **Row:** a term-button `▷ Escuchar [A]` / `⏸ Pausa [A]` (inverse video while playing), a flat seek bar (6px Rule Grey track filled with Frame Cyan up to the playhead, 12×18px square Prompt Cyan thumb), `mm:ss / mm:ss` in the chrome face and Chrome Grey, and a Rule Grey speed button cycling 1× → 1.25× → 1.5× → 2× → 0.75× (remembered per browser). Wraps to two lines on narrow screens; the hotkey hint hides on touch.
+- **Disclosure:** a Dim Grey 14px line with the broadcast glyph stating the narration is AI-generated. It always shows.
+- **Fallback:** without JavaScript the native `<audio controls>` element shows instead.
+
 ### Post ending
 - **Principle:** the end of a post is quiet and unboxed; a single ACTIONS box lives at the top of the post only.
 - **Previous / next:** one line under a 1px dotted Rule Grey separator: `‹ P title` on the left, `title N ›` on the right, Chrome Grey text with Dim Grey arrows, truncated with an ellipsis; hover turns the title Prompt Cyan.

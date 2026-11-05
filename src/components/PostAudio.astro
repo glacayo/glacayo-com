@@ -1,0 +1,256 @@
+---
+import Icon from './Icon.astro';
+import audioManifest from '../data/audio.json';
+import { useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  slug: string;
+  title: string;
+}
+
+interface AudioEntry {
+  src: string;
+  duration: number;
+}
+
+const { lang, slug, title } = Astro.props;
+const t = useTranslations(lang);
+const entry = (audioManifest as Record<string, AudioEntry>)[`${lang}/${slug}`];
+
+const clock = (seconds: number) => {
+  const total = Math.max(0, Math.round(seconds));
+  const minutes = Math.floor(total / 60);
+  return `${String(minutes).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+};
+---
+
+{
+  entry && (
+    <section class="post-audio" aria-label={t('post.audioLabel')} data-post-audio data-title={title}>
+      <audio src={entry.src} preload="none" controls data-audio-el />
+      <div class="player" data-player hidden>
+        <button
+          type="button"
+          class="term-button play"
+          data-action="audio"
+          aria-pressed="false"
+          data-label-play={t('post.listen')}
+          data-label-pause={t('post.pause')}
+        >
+          <span class="icon-play"><Icon glyph={''} /></span>
+          <span class="icon-pause"><Icon glyph={''} /></span>
+          <span data-label>{t('post.listen')}</span>
+          <span class="hotkey" aria-hidden="true">[A]</span>
+        </button>
+        <input
+          class="seek"
+          type="range"
+          min="0"
+          max={Math.round(entry.duration)}
+          step="1"
+          value="0"
+          aria-label={t('post.seek')}
+          data-seek
+        />
+        <span class="time num" aria-hidden="true">
+          <span data-current>00:00</span> / <span data-total>{clock(entry.duration)}</span>
+        </span>
+        <button type="button" class="term-button speed" data-speed aria-label={t('post.speed')}>
+          <span data-speed-label>1×</span>
+        </button>
+      </div>
+      <p class="note">
+        <Icon glyph={''} /> {t('post.audioNote')}
+      </p>
+    </section>
+  )
+}
+
+<style>
+  .post-audio {
+    margin-top: 14px;
+    padding: 12px 0;
+    border-bottom: 1px dotted var(--rule);
+  }
+  .post-audio audio {
+    width: 100%;
+    max-width: 560px;
+  }
+  .post-audio[data-enhanced] audio {
+    display: none;
+  }
+  .player {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 14px;
+  }
+  .player[hidden] {
+    display: none;
+  }
+  .play {
+    min-width: 11ch;
+  }
+  .play .icon-pause,
+  .play[aria-pressed='true'] .icon-play {
+    display: none;
+  }
+  .play[aria-pressed='true'] .icon-pause {
+    display: inline;
+  }
+  @media (pointer: coarse) {
+    .play .hotkey {
+      display: none;
+    }
+  }
+  .seek {
+    flex: 1 1 200px;
+    min-width: 140px;
+    height: 24px;
+    margin: 0;
+    background: transparent;
+    accent-color: var(--cyan);
+    cursor: pointer;
+    appearance: none;
+  }
+  .seek::-webkit-slider-runnable-track {
+    height: 6px;
+    background: linear-gradient(to right, var(--cyan) var(--progress, 0%), var(--rule) var(--progress, 0%));
+  }
+  .seek::-moz-range-track {
+    height: 6px;
+    background: var(--rule);
+  }
+  .seek::-moz-range-progress {
+    height: 6px;
+    background: var(--cyan);
+  }
+  .seek::-webkit-slider-thumb {
+    appearance: none;
+    width: 12px;
+    height: 18px;
+    margin-top: -6px;
+    background: var(--cyan-hi);
+    border: 0;
+    border-radius: 0;
+  }
+  .seek::-moz-range-thumb {
+    width: 12px;
+    height: 18px;
+    background: var(--cyan-hi);
+    border: 0;
+    border-radius: 0;
+  }
+  .seek:focus-visible {
+    outline: 1px solid var(--cyan-hi);
+    outline-offset: 2px;
+  }
+  .time {
+    font-family: var(--font-term);
+    font-size: var(--chrome-size);
+    color: var(--grey);
+    white-space: nowrap;
+  }
+  .speed {
+    min-width: 7ch;
+    justify-content: center;
+    border-color: var(--rule);
+    color: var(--grey);
+  }
+  .note {
+    margin: 10px 0 0;
+    font-family: var(--font-term);
+    font-size: 14px;
+    color: var(--dim);
+  }
+</style>
+
+<script>
+  const SPEEDS = [1, 1.25, 1.5, 2, 0.75];
+  const SPEED_KEY = 'glacayo:audio-speed';
+
+  const clock = (seconds: number) => {
+    const total = Math.max(0, Math.floor(seconds));
+    const minutes = Math.floor(total / 60);
+    return `${String(minutes).padStart(2, '0')}:${String(total % 60).padStart(2, '0')}`;
+  };
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-post-audio]')) {
+    const audio = root.querySelector<HTMLAudioElement>('[data-audio-el]');
+    const player = root.querySelector<HTMLElement>('[data-player]');
+    const play = root.querySelector<HTMLButtonElement>('[data-action="audio"]');
+    const label = play?.querySelector<HTMLElement>('[data-label]');
+    const seek = root.querySelector<HTMLInputElement>('[data-seek]');
+    const current = root.querySelector<HTMLElement>('[data-current]');
+    const total = root.querySelector<HTMLElement>('[data-total]');
+    const speed = root.querySelector<HTMLButtonElement>('[data-speed]');
+    const speedLabel = root.querySelector<HTMLElement>('[data-speed-label]');
+    if (!audio || !player || !play || !label || !seek || !current || !total || !speed || !speedLabel) continue;
+
+    audio.controls = false;
+    player.hidden = false;
+    root.dataset.enhanced = '';
+
+    let rate = 1;
+    try {
+      const saved = Number(localStorage.getItem(SPEED_KEY));
+      if (SPEEDS.includes(saved)) rate = saved;
+    } catch {
+      /* Storage can be unavailable; keep the default speed. */
+    }
+    const applyRate = () => {
+      audio.playbackRate = rate;
+      speedLabel.textContent = `${rate}×`;
+    };
+    applyRate();
+
+    const paint = () => {
+      const duration = Number.isFinite(audio.duration) ? audio.duration : Number(seek.max);
+      if (document.activeElement !== seek) seek.value = String(Math.floor(audio.currentTime));
+      seek.max = String(Math.round(duration));
+      current.textContent = clock(audio.currentTime);
+      total.textContent = clock(duration);
+      seek.style.setProperty('--progress', `${duration ? (audio.currentTime / duration) * 100 : 0}%`);
+    };
+
+    const setPlaying = (playing: boolean) => {
+      play.setAttribute('aria-pressed', String(playing));
+      label.textContent = playing ? play.dataset.labelPause ?? '' : play.dataset.labelPlay ?? '';
+    };
+
+    play.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play().catch(() => setPlaying(false));
+      } else {
+        audio.pause();
+      }
+    });
+    audio.addEventListener('play', () => {
+      setPlaying(true);
+      applyRate();
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({ title: root.dataset.title ?? '', artist: 'glacayo.com' });
+      }
+    });
+    audio.addEventListener('pause', () => setPlaying(false));
+    audio.addEventListener('ended', () => setPlaying(false));
+    audio.addEventListener('timeupdate', paint);
+    audio.addEventListener('loadedmetadata', paint);
+
+    seek.addEventListener('input', () => {
+      audio.currentTime = Number(seek.value);
+      paint();
+    });
+
+    speed.addEventListener('click', () => {
+      rate = SPEEDS[(SPEEDS.indexOf(rate) + 1) % SPEEDS.length];
+      applyRate();
+      try {
+        localStorage.setItem(SPEED_KEY, String(rate));
+      } catch {
+        /* Not persisted; the speed still applies to this page. */
+      }
+    });
+  }
+</script>
