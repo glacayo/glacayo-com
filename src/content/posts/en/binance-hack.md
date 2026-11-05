@@ -77,6 +77,52 @@ On the other blockchains (Bitcoin, Tron, XRP, Solana, and the rest), no trick wa
 
 One important nuance: **this wasn't an Ethereum bug**. An EIP-7702 delegation requires a valid signature from the wallet itself. The problem was that the attacker controlled who was signing. EIP-7702 just gave them a way to hold on longer.
 
+## How did they control those computers without being seen?
+
+There's a detail in Binance's report that's easy to miss: when the coding test installed the malware, the malware connected to **a server controlled by the attacker**. It sounds minor, but it explains how someone can spend months inside a company without anyone noticing.
+
+When we picture an attack, we tend to imagine the hacker "connecting" to the victim's computer and driving it in real time from their own. In practice, sophisticated groups almost never work that way. Connecting directly would leave their real IP in the logs, make the traffic easier to spot and block, and cost them access the moment the victim shut down the machine or switched networks.
+
+### The compromised computer calls the attacker, not the other way around
+
+The trick is to flip the direction: the malware is what **reaches out** to an attacker's server, known as a **C2** (command and control). Every so often it checks in, asks whether there are new orders, and runs them. This is called *beaconing*.
+
+Why does it work so well? Because most networks watch what comes in far more closely than what goes out. To a firewall, a computer connecting over HTTPS to a server on the internet looks exactly like someone opening a web page.
+
+<figure>
+<img src="/images/posts/binance-hack/c2-en.webp" alt="Diagram of how an attacker communicates with a compromised computer: the victim, running the malware, goes out over HTTPS to a command-and-control or C2 server; the real operator reaches that C2 through layers of proxies, VPSes, and VPNs, where each hop only knows the one before it, and never touches the victim's machine" width="1400" height="564" loading="lazy" decoding="async">
+<figcaption>The malware goes out to find the C2, and the attacker reaches the C2 by a separate, heavily layered route. Original diagram based on <a href="https://attack.mitre.org/techniques/T1090/002/">MITRE ATT&amp;CK</a> and SecurityScorecard's report on Lazarus.</figcaption>
+</figure>
+
+### The layers they hide behind
+
+On the other side, the attacker doesn't reach the C2 directly either. They usually stack several layers:
+
+- **Proxies and proxy chains:** traffic passes through one or more intermediate servers before reaching the C2. Each hop only sees the one before it. MITRE ATT&CK, the industry's most widely used knowledge base of attack techniques, documents that Lazarus has used multiple proxies to hide its traffic.
+- **Rented servers (VPSes):** they rent servers in different countries to act as C2s, relay points, or storage for stolen data. If one goes down, they spin up another.
+- **Botnets:** networks of already-infected computers used to bounce connections, so the IP that shows up in the logs belongs to another victim.
+- **Commercial VPNs:** in 2025, SecurityScorecard traced a Lazarus campaign that targeted developers with fake coding tests, a lot like this one. The operators used the commercial Astrill VPN to reach a proxy network registered to a freight company in Russia, and from there their C2 servers. Even so, researchers followed the trail back to six IP addresses in Pyongyang.
+- **Automation:** once inside, much of the work is done by scripts rather than long live sessions. At Binance, the final blow was exactly that: a script running inside the malicious container.
+
+In short, the typical flow looks like this:
+
+1. The malware lands on the victim's computer, for example through a fake coding test.
+2. The malware connects to the C2, sometimes through proxies or botnet nodes.
+3. The attacker reaches the C2 from their side, through proxies, VPSes, or VPNs.
+4. They leave orders on the C2.
+5. The malware picks them up and runs them on the victim's machine.
+
+### Why this makes detection and attribution so hard
+
+- Traffic to the C2 can look completely normal: HTTPS, DNS lookups, nothing that stands out.
+- The IPs in the logs belong to proxies, VPSes, or botnets, not the attacker.
+- If someone takes down a C2, the attacker can stand up another in minutes.
+- The malware can erase its own tracks. Binance co-CEO Richard Teng said the attacker used a self-destruct mechanism that wiped its tools and traces.
+
+That's why forensic work usually finds the entry point, the victim's computer, fairly quickly, while reaching the real operator is much harder. It's also why a compromise can go unnoticed for weeks or months, the way this one did from June to October.
+
+So how did anyone figure out who did it? Through the trail that's much harder to erase: the money on the blockchain.
+
 ## Who's behind it?
 
 Binance didn't blame any group at first, but blockchain analytics firms were quick to. On October 30, TRM Labs attributed the attack "with high confidence" to **TraderTraitor**, a North Korean hacking unit considered part of the notorious **Lazarus Group**. Chainalysis CEO Jonathan Levin agreed it was "likely" TraderTraitor, citing links to earlier thefts.
@@ -115,3 +161,5 @@ This story isn't just for exchanges. Almost all of it started on a developer's c
 - [Cointelegraph: crypto investigators link North Korea to the theft](https://cointelegraph.com/news/north-korea-linked-to-63b-binance-hack-by-crypto-investigators) (October 30, 2026)
 - [Al Jazeera: FBI blames North Korea](https://aljazeera.com/news/2026/11/1/fbi-blames-north-korea-for-record-6-3bn-crypto-heist) (November 1, 2026)
 - [Decrypt: what is EIP-7702](https://decrypt.co/resources/what-is-eip-7702-the-ethereum-upgrade-behind-the-6-4b-binance-hack) (October 30, 2026)
+- [MITRE ATT&CK: External Proxy technique (T1090.002)](https://attack.mitre.org/techniques/T1090/002/)
+- [Dark Reading: researchers uncover Lazarus admin layer for C2 servers](https://www.darkreading.com/cyberattacks-data-breaches/researchers-uncover-lazarus-admin-layer-c2-servers), on SecurityScorecard's report (January 2025)

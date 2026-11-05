@@ -77,6 +77,52 @@ En el resto de blockchains (Bitcoin, Tron, XRP, Solana y demás) no hizo falta n
 
 Un matiz importante: **esto no fue un fallo de Ethereum**. Una delegación EIP-7702 necesita una firma válida de la propia wallet. El problema fue que el atacante controlaba quién firmaba. EIP-7702 solo le dio una forma de mantener el control por más tiempo.
 
+## ¿Cómo controlaban esas computadoras sin dejarse ver?
+
+Hay un detalle del informe de Binance que pasa casi desapercibido: cuando la prueba técnica instaló el malware, este se conectó a **un servidor controlado por el atacante**. Parece poca cosa, pero explica cómo alguien puede pasar meses dentro de una empresa sin que nadie lo vea.
+
+Cuando imaginamos un ataque, solemos pensar que el hacker "se conecta" a la computadora de la víctima y la maneja en tiempo real desde la suya. En la práctica, los grupos sofisticados casi nunca lo hacen así. Conectarse de forma directa dejaría su IP real registrada, haría el tráfico más fácil de detectar y bloquear, y les haría perder el acceso en cuanto la víctima apagara la máquina o cambiara de red.
+
+### La computadora comprometida llama al atacante, no al revés
+
+El truco es invertir la dirección: el malware es el que **sale** a buscar a un servidor del atacante, conocido como **C2** (comando y control). Cada cierto tiempo se reporta, pregunta si hay órdenes nuevas y las ejecuta. A esto se le llama *beaconing*.
+
+¿Por qué funciona tan bien? Porque la mayoría de las redes vigilan mucho más lo que entra que lo que sale. Para el firewall, una computadora que se conecta por HTTPS a un servidor en internet se ve igual que alguien abriendo una página web.
+
+<figure>
+<img src="/images/posts/binance-hack/c2.webp" alt="Diagrama de cómo se comunica un atacante con una computadora comprometida: la víctima, con el malware, sale a internet por HTTPS hacia un servidor de comando y control o C2; el operador real llega a ese C2 a través de capas de proxies, VPS y VPN, donde cada salto solo conoce al anterior, y nunca toca la máquina de la víctima" width="1400" height="511" loading="lazy" decoding="async">
+<figcaption>El malware sale a buscar al C2, y el atacante llega al C2 por otro camino lleno de capas. Diagrama propio basado en <a href="https://attack.mitre.org/techniques/T1090/002/">MITRE ATT&amp;CK</a> y el reporte de SecurityScorecard sobre Lazarus.</figcaption>
+</figure>
+
+### Las capas para esconderse
+
+Del otro lado, el atacante tampoco llega al C2 de forma directa. Suele apilar varias capas:
+
+- **Proxies y cadenas de proxies:** el tráfico pasa por uno o varios servidores intermedios antes de llegar al C2. Cada salto solo ve al anterior. MITRE ATT&CK, la base de conocimiento de técnicas de ataque más usada en la industria, documenta que Lazarus ha usado varios proxies para ocultar su tráfico.
+- **Servidores alquilados (VPS):** rentan servidores en distintos países que hacen de C2, de punto intermedio o de almacén de lo robado. Si uno cae, levantan otro.
+- **Botnets:** redes de computadoras ya infectadas que sirven para rebotar conexiones, así la IP que aparece en los registros es la de otra víctima.
+- **VPN comerciales:** en 2025, SecurityScorecard rastreó una campaña de Lazarus contra developers con pruebas técnicas falsas, muy parecida a esta. Los operadores usaban la VPN comercial Astrill para llegar a una red de proxies registrada a nombre de una empresa de transporte en Rusia, y desde ahí a sus servidores C2. Aun así, los investigadores lograron seguir el rastro hasta seis direcciones IP en Pionyang.
+- **Automatización:** una vez dentro, buena parte del trabajo se hace con scripts y no con sesiones largas en vivo. En Binance, el golpe final fue justamente un script que corrió dentro del contenedor malicioso.
+
+En resumen, el flujo típico se ve así:
+
+1. El malware entra en la computadora de la víctima, por ejemplo con una prueba técnica falsa.
+2. El malware se conecta al C2, a veces pasando por proxies o por nodos de una botnet.
+3. El atacante llega al C2 desde su lado, a través de proxies, VPS o VPN.
+4. Desde el C2 deja las órdenes.
+5. El malware las recoge y las ejecuta en la máquina de la víctima.
+
+### Por qué esto complica la detección y la atribución
+
+- El tráfico hacia el C2 puede parecer normal: HTTPS, consultas DNS, nada que llame la atención.
+- Las IPs que aparecen en los registros son de proxies, VPS o botnets, no del atacante.
+- Si alguien da de baja un C2, el atacante puede montar otro en minutos.
+- El malware puede borrar sus propias huellas. Richard Teng, codirector ejecutivo de Binance, dijo que el atacante usó un mecanismo de autodestrucción que eliminó sus herramientas y rastros.
+
+Por eso la investigación forense suele encontrar con relativa facilidad el punto de entrada, la computadora de la víctima, pero llegar hasta el operador real es mucho más difícil. Y también por eso un compromiso puede pasar semanas o meses sin que nadie lo note, como pasó aquí entre junio y octubre.
+
+Entonces, ¿cómo se supo quién fue? Por el rastro que sí es difícil de borrar: el del dinero en la blockchain.
+
 ## ¿Quién está detrás?
 
 Binance no culpó de entrada a ningún grupo, pero las firmas de análisis blockchain lo hicieron rápido. El 30 de octubre, TRM Labs atribuyó el ataque "con alta confianza" a **TraderTraitor**, una unidad de hackers de Corea del Norte que se considera parte del famoso **Lazarus Group**. Jonathan Levin, CEO de Chainalysis, coincidió en que "probablemente" fue TraderTraitor, por sus vínculos con robos anteriores.
@@ -115,3 +161,5 @@ Esta historia no es solo para exchanges. Casi todo empezó en la computadora de 
 - [Cointelegraph: investigadores vinculan a Corea del Norte con el robo](https://cointelegraph.com/news/north-korea-linked-to-63b-binance-hack-by-crypto-investigators) (30 de octubre de 2026)
 - [Al Jazeera: el FBI culpa a Corea del Norte](https://aljazeera.com/news/2026/11/1/fbi-blames-north-korea-for-record-6-3bn-crypto-heist) (1 de noviembre de 2026)
 - [Decrypt: qué es EIP-7702](https://decrypt.co/resources/what-is-eip-7702-the-ethereum-upgrade-behind-the-6-4b-binance-hack) (30 de octubre de 2026)
+- [MITRE ATT&CK: técnica de proxy externo (T1090.002)](https://attack.mitre.org/techniques/T1090/002/)
+- [Dark Reading: la capa de administración de Lazarus para sus servidores C2](https://www.darkreading.com/cyberattacks-data-breaches/researchers-uncover-lazarus-admin-layer-c2-servers), sobre el reporte de SecurityScorecard (enero de 2025)
