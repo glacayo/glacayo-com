@@ -379,11 +379,13 @@ function setupSearch(): void {
 
 /* ---------- Hotkeys ---------- */
 
+const NON_TEXT_INPUTS = new Set(['range', 'checkbox', 'radio', 'button', 'submit', 'reset']);
+
 function isTyping(target: EventTarget | null): boolean {
-  return (
-    target instanceof HTMLElement &&
-    (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName))
-  );
+  if (!(target instanceof HTMLElement)) return false;
+  if (target.isContentEditable) return true;
+  if (target instanceof HTMLInputElement) return !NON_TEXT_INPUTS.has(target.type);
+  return ['TEXTAREA', 'SELECT'].includes(target.tagName);
 }
 
 let baseDigits = '';
@@ -427,6 +429,7 @@ function setupHotkeys(): void {
     if (key === 'h' && click('[data-action="share"]')) return;
     if (key === 'b' && click('[data-action="bookmark"]')) return;
     if (key === 'd' && click('[data-action="download"]')) return;
+    if (key === 'a' && click('[data-action="audio"]')) return;
     if (/^[0-9]$/.test(key) && !$('[data-post-slug]')) {
       pushBaseDigit(key);
     }

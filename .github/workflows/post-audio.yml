@@ -1,0 +1,75 @@
+name: Post audio
+
+# Narrates each post once with the OpenAI Realtime API, uploads the MP3 to
+# Cloudflare R2 and commits the updated manifest (src/data/audio.json).
+# Posts that already have an entry are skipped, so a post is only narrated once
+# unless it is forced from the manual run.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/content/posts/**'
+  workflow_dispatch:
+    inputs:
+      posts:
+        description: 'Regenerate these posts (comma-separated lang/slug, or "all"). Leave empty to only narrate new posts.'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: post-audio
+  cancel-in-progress: false
+
+jobs:
+  narrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Generate narrations
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          AUDIO_PUBLIC_URL: ${{ secrets.AUDIO_PUBLIC_URL }}
+          FORCE_POSTS: ${{ github.event.inputs.posts }}
+        run: |
+          if [ -n "$FORCE_POSTS" ]; then
+            pnpm audio --force "$FORCE_POSTS"
+          else
+            pnpm audio
+          fi
+
+      # Runs even if one post failed, so the narrations that did finish are kept.
+      - name: Commit manifest
+        if: ${{ !cancelled() }}
+        run: |
+          if git diff --quiet -- src/data/audio.json; then
+            echo "No new narrations."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/audio.json
+          git commit -m "chore(audio): add post narrations"
+          git pull --rebase origin main
+          git push origin HEAD:main
