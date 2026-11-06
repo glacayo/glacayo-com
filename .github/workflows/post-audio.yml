@@ -40,11 +40,20 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # apt mirrors occasionally hang; cap each attempt and retry instead of waiting for the job timeout.
+      # Prefer a static build from GitHub Releases: Ubuntu's apt mirrors sometimes hang for many minutes.
+      # apt stays as a capped fallback.
       - name: Install ffmpeg
         timeout-minutes: 12
         run: |
           if command -v ffmpeg >/dev/null; then ffmpeg -version | head -1; exit 0; fi
+          url=https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz
+          if curl -fsSL --retry 3 --max-time 180 "$url" -o /tmp/ffmpeg.tar.xz; then
+            mkdir -p "$HOME/ffmpeg" && tar -xJf /tmp/ffmpeg.tar.xz -C "$HOME/ffmpeg" --strip-components=1
+            echo "$HOME/ffmpeg/bin" >> "$GITHUB_PATH"
+            "$HOME/ffmpeg/bin/ffmpeg" -version | head -1
+            exit 0
+          fi
+          echo "Static ffmpeg download failed; falling back to apt."
           for attempt in 1 2 3; do
             if sudo timeout 180 apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=30 update \
               && sudo timeout 180 apt-get install -y --no-install-recommends ffmpeg; then
