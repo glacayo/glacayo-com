@@ -1,4 +1,13 @@
 {
+  "en/best-ai-models-november-2026": {
+    "src": "https://audio.glacayo.com/posts/en/best-ai-models-november-2026-c5115f40.mp3",
+    "duration": 2002.8,
+    "bytes": 16023193,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "c5115f40f994",
+    "generatedAt": "2026-11-06T20:52:01.106Z"
+  },
   "en/binance-hack": {
     "src": "https://audio.glacayo.com/posts/en/binance-hack-01ba1c0d.mp3",
     "duration": 905.4,
@@ -97,6 +106,15 @@
     "voice": "ash",
     "textHash": "bf3d23a45815",
     "generatedAt": "2026-11-05T16:46:19.541Z"
+  },
+  "es/mejores-modelos-ia-noviembre-2026": {
+    "src": "https://audio.glacayo.com/posts/es/mejores-modelos-ia-noviembre-2026-697ec411.mp3",
+    "duration": 2251.8,
+    "bytes": 18015209,
+    "model": "gpt-realtime-2.1-mini",
+    "voice": "ash",
+    "textHash": "697ec4117f02",
+    "generatedAt": "2026-11-06T20:47:59.920Z"
   },
   "es/moonshot-kimi-k3-1-pro": {
     "src": "https://audio.glacayo.com/posts/es/moonshot-kimi-k3-1-pro-30f1d3b2.mp3",
