@@ -1,20 +1,32 @@
 ---
-title: "Hermes con Bot Screen en un VPS: un equipo de bots con su propia computadora"
-description: Instalé Hermes Agent con Bot Mode y Bot Screen en un VPS de 4 GB. Lo que salió mal, cómo cerré el servidor y lo que aprendí al darle a cada bot su propio escritorio.
+title: "Alternativa a Grok Bot y OpenBot: mi experiencia con Hermes y Bot Screen en un VPS propio"
+description: Si ya usaste Grok Bot u OpenBot y buscas algo más, así me fue con Hermes Agent, Bot Mode y Bot Screen en un VPS de 4 GB. Qué cambia, qué salió mal y cómo lo dejé seguro.
 date: 2026-11-12T16:00:00Z
 category: agents
 translationKey: hermes-bot-screen-vps
 ---
 
-¿Te imaginas un asistente de IA que trabaja las 24 horas en una computadora que es solo suya, con su navegador y su escritorio, y que te llama únicamente cuando hay que poner una contraseña? Eso es lo que quise armar hace unos días en un servidor propio.
+Si llegaste hasta aquí, probablemente ya usaste [Grok Bot](https://x.ai/news/introducing-grok-bot), de [SpaceXAI](https://x.com/SpaceXSI), u [OpenBot](https://github.com/mandarwagh9/openbot), su reimplementación de código abierto. Ya sabes lo que se siente tener bots que trabajan solos en su propia computadora. Y también sabes dónde se quedan cortos.
 
-Ya había probado [Grok Bot](https://x.ai/news/introducing-grok-bot), de [SpaceXAI](https://x.com/SpaceXSI), y [OpenBot](https://github.com/mandarwagh9/openbot), su reimplementación de código abierto. Buscaba algo más flexible y que pudiera controlar de punta a punta, y terminé en **Hermes Agent**, de [Nous Research](https://x.com/NousResearch). En concreto, en dos piezas que llegaron entre septiembre y octubre: **Bot Mode**, que convierte tus perfiles en un equipo de bots con nombre, rol y memoria propios, y **Bot Screen**, que le da a cada bot un escritorio Linux que puedes ver en vivo.
+A mí me pasó igual. Probé los dos y quería algo más flexible, que pudiera controlar de punta a punta: mi servidor, el modelo que yo elija y cada bot con su propio escritorio. La alternativa que encontré fue **Hermes Agent**, de [Nous Research](https://x.com/NousResearch), con dos piezas que llegaron entre septiembre y octubre: **Bot Mode**, que convierte tus perfiles en un equipo de bots con nombre, rol y memoria propios, y **Bot Screen**, que le da a cada bot un escritorio Linux que puedes ver en vivo.
 
 La instalación fue lo de menos. Lo interesante estuvo en todo lo que apareció alrededor: un proveedor de internet que me bloqueaba, bots desconocidos tocando la puerta del servidor y un par de trampas silenciosas al clonar agentes.
 
-## ¿Por qué Hermes?
+## Si vienes de Grok Bot u OpenBot, esto es lo que cambia
 
-Me convencieron tres cosas:
+La idea de fondo es la misma: agentes con nombre, que trabajan en una computadora propia y te llaman cuando te necesitan. Lo que cambia es dónde vive todo y cuánto control tienes.
+
+- **El servidor es tuyo.** Los bots de Grok Bot corren en una computadora en la nube de SpaceXAI. Con Hermes eliges tú la máquina: un VPS, un homelab o Hermes Cloud. Tus sesiones y tus archivos se quedan donde tú decidas.
+- **No dependes de un plan.** Grok Bot no se vende suelto: al lanzamiento, en agosto de 2026, venía incluido en SuperGrok Heavy, Cursor Ultra (200 dólares al mes) y Cursor Teams Premium (120 dólares por usuario al mes). Hermes es de código abierto con licencia MIT; pagas el servidor y el modelo que uses.
+- **Eliges el modelo.** Funciona con tu suscripción de ChatGPT, con Nous Portal, con OpenRouter o con tu propio servidor de modelos.
+- **Cada bot tiene su propio escritorio.** En OpenBot los bots comparten una sola computadora persistente. En Hermes, cada perfil tiene su pantalla, su perfil de navegador y sus cookies.
+- **Va más allá de un pre-alpha.** OpenBot se describe a sí mismo como pre-alpha. Hermes ya tiene versiones estables y un equipo publicando parches casi cada semana.
+
+Lo que no cambia: sigues siendo tú quien cuida la seguridad. Y si lo montas en tu propio servidor, todavía más.
+
+## Por qué me quedé con Hermes
+
+Además de lo anterior, me convencieron tres cosas del día a día:
 
 1. **Usa la computadora como una persona.** Con *computer use*, el bot ve la pantalla, hace clic, escribe y navega. No depende de que cada servicio tenga una integración oficial.
 2. **Crea sus propias herramientas.** Hermes va armando *skills* reutilizables a partir de lo que le pides. En vez de configurarle todo a mano, le explico lo que necesito y él construye la herramienta.
@@ -173,6 +185,8 @@ En un próximo post te cuento cómo mejorar la privacidad de tu conexión. Mient
 - [Releases de Hermes Agent en GitHub](https://github.com/NousResearch/hermes-agent/releases)
 - [Nous Research añade Bot Screen a Hermes Desktop (Tao Media, 24 de septiembre de 2026)](https://www.tao.media/nous-research-adds-live-bot-screen-passthrough-to-hermes-desktop/)
 - [Introducing Grok Bot (xAI)](https://x.ai/news/introducing-grok-bot)
+- [Lanzamiento de Grok Bot: planes y precios (Unite.AI, agosto de 2026)](https://www.unite.ai/xai-launches-grok-bot-always-on-ai-teammates-with-their-own-cloud-computers/)
+- [OpenBot: alternativa de código abierto a Grok Bot (ChatGate)](https://chatgate.ai/post/openbot-2)
 - [OpenBot en GitHub](https://github.com/mandarwagh9/openbot)
 - [Engram en GitHub](https://github.com/Gentleman-Programming/engram)
 - [Anthropic cierra el uso de suscripciones con herramientas de terceros (Hongkiat)](https://www.hongkiat.com/blog/anthropic-closed-openclaw-loophole/)
